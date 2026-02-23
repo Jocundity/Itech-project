@@ -284,8 +284,56 @@
   </div>
 </nav>
 
-    <main> {% block content %}{% endblock %}
-</main>
+<!-- -------------------------------------------------------------------------------------------------------- -->
+<!-- Insertable content on any page that etends base.html -->
+
+    <main> 
+        {% block content %}{% endblock %}
+    </main>
+
+<!-- -------------------------------------------------------------------------------------------------------- -->
+<!-- Footer (on every page) -->
+
+<footer class="bg-white pt-5 pb-3">
+    <div class="container px-md-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <a class="navbar-brand fw-bold text-success d-flex align-items-center mb-3" href="#">
+                    <span class="me-2">💚</span> KindredConnect
+                </a>
+                <p class="text-muted small" style="max-width: 250px;">Bridging the gap in elderly care through compassion, connection, and community.</p>
+            </div>
+            <div class="col-6 col-md-2">
+                <h6 class="fw-bold mb-3">Quick Links</h6>
+                <ul class="list-unstyled small text-muted">
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">About Us</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Browse Activities</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Become a Volunteer</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md-2">
+                <h6 class="fw-bold mb-3">Support</h6>
+                <ul class="list-unstyled small text-muted">
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Help Center</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Privacy Policy</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h6 class="fw-bold mb-3">Contact Us</h6>
+                <ul class="list-unstyled small text-muted">
+                    <li class="mb-2">📞 1-800-KINDRED</li>
+                    <li class="mb-2">📧 hello@kindredconnect.org</li>
+                    <li class="mb-2">📍 123 Care Street, Community City, CC 12345</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="my-4 text-muted opacity-25">
+        <div class="text-center text-muted smaller">
+            &copy; 2026 KindredConnect. Made with love for our community.
+        </div>
+    </div>
+</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
