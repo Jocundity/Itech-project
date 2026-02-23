@@ -1,0 +1,292 @@
+{% load static %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 88.9L16.7 55.6C7.2 46.1 7.2 30.9 16.7 21.4s24.7-9.5 34.2 0L50 20.5l-.9.9c9.5-9.5 24.7-9.5 34.2 0s9.5 24.7 0 34.2L50 88.9z' fill='white'/></svg>#v=1">
+    <title>KindredConnect</title>
+
+    
+
+<style>
+
+/* custom style for navbar*/
+    .navbar-custom {
+        background-color: #fcfaf8;
+        border-bottom: 1px solid #e5e7eb; /* Subtle line like your Mantine header */
+    }
+    .navbar-custom .nav-link, .navbar-custom .navbar-brand {
+        color: #374151; /* Darker text for readability on light background */
+    }
+    .navbar-custom .nav-link:hover {
+        color: #059669; /* Emerald green hover effect */
+    }
+    .navbar-custom {
+    position: sticky;
+    top: 0;
+    z-index: 1020; /* Ensures it stays above all other content */
+    background-color: rgba(252, 250, 248, 0.95); /* Slight transparency for a modern feel */
+    backdrop-filter: blur(8px); /* Frosted glass effect */
+    }
+
+/* Custom Hover for the Sign In link */
+/* "Sign In" Ghost Button Hover Effect */
+.nav-signin {
+    color: #374151; /* Default dark text */
+    padding: 8px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease; /* Smooth fade effect */
+    text-decoration: none;
+    border: 1px solid transparent; /* Keeps sizing consistent on hover */
+}
+
+.nav-signin:hover {
+    background-color: #059669; /* Full Emerald green background */
+    color: #ffffff !important; /* White text on hover */
+    box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2); /* Subtle glow */
+}
+
+/* Brand Hover Effect (Logo + Title) */
+.navbar-brand {
+    transition: opacity 0.3s ease; /* Smoothly fades the entire brand area */
+}
+
+.navbar-brand:hover {
+    opacity: 0.75; /* Decreases visibility slightly on hover */
+}
+
+/* Animated Underline for Links */
+.nav-link, .footer-link {
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.3s ease;
+}
+
+.nav-link::after, .footer-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #059669; /* Emerald Green */
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after, .footer-link:hover::after {
+    width: 100%; /* Slides the underline out to full width */
+}
+
+/* ------------------------------------------------------------------------------------------------- */
+/* custom style for cta section */
+
+/* Hero Background Styling */
+
+.hero-section {
+    height: 80vh; /* Takes up 80% of the screen height */
+    background: linear-gradient(to right, rgba(252, 250, 248, 0.9) 30%, rgba(252, 250, 248, 0.2)),
+                url("{% static 'images/hero-bg.jpg' %}");
+    background-size: cover;
+    background-position: center;
+}
+/* ------------------------------------------------------------------------------------------------- */
+.text-emerald { color: #065f46; }
+
+/* Custom Emerald Buttons*/
+
+.btn-emerald {
+    background-color: #059669;
+    color: white;
+    border: none;
+    border-radius: 12px;
+}
+
+.btn-emerald:hover { background-color: #047857; color: white; }
+
+.btn-emerald-outline {
+    background-color: #f0fdf4;
+    color: #065f46;
+    border: 2px solid #059669;
+    border-radius: 12px;
+}
+
+.badge-pill .badge {
+    background-color: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #d1fae5;
+}
+/* ------------------------------------------------------------------------------------------------- */
+/* Card Customizations */
+.custom-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-top: 4px solid transparent !important;
+}
+.custom-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Individual Card Borders */
+.senior-card { border-top-color: #10b981 !important; }
+.volunteer-card { border-top-color: #059669 !important; }
+.care_home-card { border-top-color: #3b82f6 !important; }
+
+/* Icon boxes */
+.icon-box {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 1.2rem;
+}
+.bg-emerald-light { background-color: #ecfdf5; }
+.bg-blue-light { background-color: #eff6ff; }
+.text-blue { color: #3b82f6; }
+
+/* Buttons */
+.btn-emerald-dark { background-color: #047857; color: white; border: none; }
+.btn-primary-custom { background-color: #2563eb; color: white; border: none; }
+
+/* ------------------------------------------------------------------------------------------------- */
+/* Feature Section Styling */
+.rounded-4 { border-radius: 1rem !important; }
+
+.feature-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #ecfdf5; /* Light emerald background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 1.2rem;
+}
+
+.shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Safety Feature Card Hover Effects */
+.safety-card {
+    transition: all 0.3s ease; /* Smoothly animates transform and shadow */
+    cursor: default;
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Very subtle border */
+}
+
+.safety-card:hover {
+    transform: translateY(-8px); /* Lifts the card up */
+    background-color: #ffffff;
+    box-shadow: 0 12px 24px rgba(5, 150, 105, 0.1) !important; /* Soft emerald-tinted shadow */
+    border-color: #d1fae5; /* Changes border to light emerald on hover */
+}
+
+/* ------------------------------------------------------------------------------------------------- */
+
+/* CTA Banner Styling */
+.cta-banner {
+    background-color: #059669; /* Primary Emerald */
+    background-image: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 20%),
+                      radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 20%);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-heart-icon {
+    width: 64px;
+    height: 64px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+}
+
+/* Ensure the white button has a subtle lift on hover */
+.btn-light {
+    transition: transform 0.2s ease;
+}
+.btn-light:hover {
+    transform: translateY(-3px);
+    background-color: #ffffff;
+}
+.cta-banner {
+    position: relative;
+    overflow: hidden; /* Clips the bubbles so they don't cause scrolling */
+}
+.cta-banner::before, .cta-banner::after {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 50%;
+    z-index: 0;
+}
+.cta-banner::before { top: -100px; left: -100px; }
+.cta-banner::after { bottom: -100px; right: -100px; }
+
+.cta-banner > .container {
+    position: relative;
+    z-index: 1; /* Puts text above the bubbles */
+}
+/* ------------------------------------------------------------------------------------------------- */
+
+/* Specific color for footer links to match design */
+.footer-link {
+    color: #6b7280; /* Gray text by default */
+    text-decoration: none;
+    opacity: 0.7; /* Start slightly faded */
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+/* Footer Link Hover State */
+.footer-link:hover {
+    color: #059669; /* Turns Emerald on hover */
+    opacity: 1;    /* Increases to full visibility */
+}
+</style>
+
+<!-- -------------------------------------------------------------------------------------------------------- -->
+<!-- Base navbar (on every page) -->
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-custom py-3">
+  <div class="container-fluid px-md-5">
+    
+    <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'kindred:index' %}">
+      <span class="me-2 text-success">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#059669" class="me-2">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>
+      </span>
+      KindredConnect
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:index' %}">Home</a></li>
+            <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:about' %}">About</a></li>
+            <li class="nav-item"><a class="nav-link px-3" href="#">Activities</a></li>
+            <li class="nav-item"><a class="nav-link px-3" href="#">Profile</a></li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-3">
+            <a href="#" class="nav-signin fw-medium">Sign In</a>
+            <a href="#" class="btn btn-emerald px-4 rounded-pill fw-bold">Get Started</a>
+        </div>
+    </div>
+  </div>
+</nav>
+
+    <main> {% block content %}{% endblock %}
+</main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

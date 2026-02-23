@@ -1,12 +1,250 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kindred Care Connect</title>
-</head>
-<body>
-    <h1>Welcome to the index page</h1>
-    <a href="{% url 'kindred:about' %}">About</a><br />
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Hero section -->
+
+<section class="hero-section d-flex align-items-center">
+    <div class="container text-left px-md-5">
+        <div class="badge-pill mb-3">
+            <span class="badge rounded-pill px-3 py-2">
+                <i class="bi bi-shield-check me-1"></i> Verified & Trusted Care Network
+            </span>
+        </div>
+
+        <h1 class="display-3 fw-bold mb-4 hero-title">
+            Bridge the Gap in <br> <span class="text-emerald">Elderly Care</span>
+        </h1>
+
+        <p class="lead mb-5 hero-subtitle col-lg-6">
+            KindredConnect matches seniors with verified volunteers and charitable organizations, 
+            creating a safety-first ecosystem where social interaction meets professional oversight.
+        </p>
+
+        <!-- hero section buttons -->
+        <div class="d-flex flex-column flex-md-row gap-3 px-3 px-md-0">
+            <a href="#" class="btn btn-emerald btn-lg px-4 py-3 fw-bold">Join as Senior &rarr;</a>
+            <a href="#" class="btn btn-emerald-outline btn-lg px-4 py-3 fw-bold">Become a Volunteer &rarr;</a>
+        </div>
+
+        <!-- Badges -->
+        <div class="d-flex flex-wrap gap-4 mt-5 pt-3 border-top border-light-subtle">
+            <div class="d-flex align-items-center gap-2">
+                <span class="text-success fs-4">🛡️</span>
+                <div>
+                    <div class="fw-bold lh-1 small">100% Verified</div>
+                    <div class="text-muted smaller">Background Checked</div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="text-success fs-4">❤️</span>
+                <div>
+                    <div class="fw-bold lh-1 small">5,000+</div>
+                    <div class="text-muted smaller">Seniors Helped</div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span class="text-success fs-4">🤝</span>
+                <div>
+                    <div class="fw-bold lh-1 small">50+</div>
+                    <div class="text-muted smaller">Partner Charities</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--  Sign in options Section -->
+
+<section class="py-5 bg-white">
+    <div class="container text-center px-md-5">
+        <h2 class="display-6 fw-bold mb-3">Choose Your Path</h2>
+        <p class="text-muted mb-5 mx-auto" style="max-width: 600px;">
+            Whether you're seeking care, offering help, or managing a charitable organization, KindredConnect has a place for you.
+        </p>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm custom-card senior-card">
+                    <div class="card-body p-4 text-start d-flex flex-column">
+                        <div class="icon-box mb-3 bg-emerald-light">👤</div>
+                        <h3 class="h4 fw-bold">For Seniors</h3>
+                        <p class="text-muted small">Find companionship and assistance for daily activities. Our verified volunteers are here to help.</p>
+                        <ul class="list-unstyled mb-4 small flex-grow-1">
+                            <li><span class="text-emerald">●</span> Easy-to-use interface</li>
+                            <li><span class="text-emerald">●</span> Large buttons & text</li>
+                            <li><span class="text-emerald">●</span> Emergency support</li>
+                            <li><span class="text-emerald">●</span> Activity matching</li>
+                        </ul>
+                        <a href="#" class="btn btn-emerald w-100 rounded-pill py-2">Join as Senior &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm custom-card volunteer-card">
+                    <div class="card-body p-4 text-start d-flex flex-column">
+                        <div class="icon-box mb-3 bg-emerald-light">🤝</div>
+                        <h3 class="h4 fw-bold">For Volunteers</h3>
+                        <p class="text-muted small">Make a difference in someone's life. Connect with seniors who need companionship and help.</p>
+                        <ul class="list-unstyled mb-4 small flex-grow-1">
+                            <li><span class="text-emerald">●</span> Flexible scheduling</li>
+                            <li><span class="text-emerald">●</span> Skill-based matching</li>
+                            <li><span class="text-emerald">●</span> Training resources</li>
+                            <li><span class="text-emerald">●</span> Community impact</li>
+                        </ul>
+                        <a href="#" class="btn btn-emerald-dark w-100 rounded-pill py-2">Become a Volunteer &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm custom-card care_home-card">
+                    <div class="card-body p-4 text-start d-flex flex-column">
+                        <div class="icon-box mb-3 bg-blue-light">🏢</div>
+                        <h3 class="h4 fw-bold">For Care Homes</h3>
+                        <p class="text-muted small">Manage and grow your volunteer network with our comprehensive charity administration tools.</p>
+                        <ul class="list-unstyled mb-4 small flex-grow-1">
+                            <li><span class="text-blue">●</span> Volunteer management</li>
+                            <li><span class="text-blue">●</span> Background check integration</li>
+                            <li><span class="text-blue">●</span> Activity monitoring</li>
+                            <li><span class="text-blue">●</span> Impact reports</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary-custom w-100 rounded-pill py-2">Partner With Us &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features section -->
+
+<section class="py-5" style="background-color: #fcfaf8;">
+    <div class="container px-md-5 text-center">
+        <h2 class="display-6 fw-bold mb-3">Built with Safety in Mind</h2>
+        <p class="text-muted mb-5 mx-auto" style="max-width: 700px;">
+            Every feature is designed with accessibility, security, and ease of use as our top priorities.
+        </p>
+
+        <div class="row g-4 text-start">
+            <div class="col-md-4">
+                <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                    <div class="feature-icon mb-3">🛡️</div>
+                    <h4 class="fw-bold h5">Verified Volunteers</h4>
+                    <p class="text-muted small mb-0">Every volunteer undergoes thorough background checks and verification through our partner foundations.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                    <div class="feature-icon mb-3">🕒</div>
+                    <h4 class="fw-bold h5">Flexible Scheduling</h4>
+                    <p class="text-muted small mb-0">Easily coordinate activities based on availability. Find help when you need it, volunteer when you can.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                    <div class="feature-icon mb-3">📍</div>
+                    <h4 class="fw-bold h5">Location Matching</h4>
+                    <p class="text-muted small mb-0">Connect with volunteers and seniors in your local community for convenient, in-person activities.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                    <div class="feature-icon mb-3">🔔</div>
+                    <h4 class="fw-bold h5">Emergency Alerts</h4>
+                    <p class="text-muted small mb-0">One-touch emergency button instantly notifies family members and care coordinators.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                    <div class="feature-icon mb-3">👥</div>
+                    <h4 class="fw-bold h5">Community Building</h4>
+                    <p class="text-muted small mb-0">Join group activities and events designed to combat isolation and foster genuine connections.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                    <div class="feature-icon mb-3">🔒</div>
+                    <h4 class="fw-bold h5">Privacy First</h4>
+                    <p class="text-muted small mb-0">Your personal information is protected. Control what you share and with whom.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Ready to make a difference ? -->
+
+<section class="cta-banner py-5">
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center text-white">
+                <div class="mb-4">
+                    <div class="cta-heart-icon mx-auto d-flex align-items-center justify-content-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                    </div>
+                </div>
+                <h2 class="display-5 fw-bold mb-3">Ready to Make a Difference?</h2>
+                <p class="mb-4 opacity-75">Join thousands of caring individuals who are bridging the gap in elderly care.</p>
+                <div class="d-flex flex-column flex-md-row gap-3 justify-content-center">
+                    <a href="#" class="btn btn-light px-4 py-2 fw-bold text-success">Get Started Today &rarr;</a>
+                    <a href="#" class="btn btn-outline-light px-4 py-2 fw-bold">Learn More About Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer section -->
+
+<footer class="bg-white pt-5 pb-3">
+    <div class="container px-md-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <a class="navbar-brand fw-bold text-success d-flex align-items-center mb-3" href="#">
+                    <span class="me-2">💚</span> KindredConnect
+                </a>
+                <p class="text-muted small" style="max-width: 250px;">Bridging the gap in elderly care through compassion, connection, and community.</p>
+            </div>
+            <div class="col-6 col-md-2">
+                <h6 class="fw-bold mb-3">Quick Links</h6>
+                <ul class="list-unstyled small text-muted">
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">About Us</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Browse Activities</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Become a Volunteer</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md-2">
+                <h6 class="fw-bold mb-3">Support</h6>
+                <ul class="list-unstyled small text-muted">
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Help Center</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Privacy Policy</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h6 class="fw-bold mb-3">Contact Us</h6>
+                <ul class="list-unstyled small text-muted">
+                    <li class="mb-2">📞 1-800-KINDRED</li>
+                    <li class="mb-2">📧 hello@kindredconnect.org</li>
+                    <li class="mb-2">📍 123 Care Street, Community City, CC 12345</li>
+                </ul>
+            </div>
+        </div>
+        <hr class="my-4 text-muted opacity-25">
+        <div class="text-center text-muted smaller">
+            &copy; 2026 KindredConnect. Made with love for our community.
+        </div>
+    </div>
+</footer>
+
+{% endblock %}
