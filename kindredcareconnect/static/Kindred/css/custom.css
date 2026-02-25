@@ -1,0 +1,235 @@
+/* custom style for navbar*/
+    .navbar-custom {
+        background-color: #fcfaf8;
+        border-bottom: 1px solid #e5e7eb; /* Subtle line like your Mantine header */
+    }
+    .navbar-custom .nav-link, .navbar-custom .navbar-brand {
+        color: #374151; /* Darker text for readability on light background */
+    }
+    .navbar-custom .nav-link:hover {
+        color: #059669; /* Emerald green hover effect */
+    }
+    .navbar-custom {
+    position: sticky;
+    top: 0;
+    z-index: 1020; /* Ensures it stays above all other content */
+    background-color: rgba(252, 250, 248, 0.95); /* Slight transparency for a modern feel */
+    backdrop-filter: blur(8px); /* Frosted glass effect */
+    }
+
+/* Custom Hover for the Sign In link */
+/* "Sign In" Ghost Button Hover Effect */
+.nav-signin {
+    color: #374151; /* Default dark text */
+    padding: 8px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease; /* Smooth fade effect */
+    text-decoration: none;
+    border: 1px solid transparent; /* Keeps sizing consistent on hover */
+}
+
+.nav-signin:hover {
+    background-color: #059669; /* Full Emerald green background */
+    color: #ffffff !important; /* White text on hover */
+    box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2); /* Subtle glow */
+}
+
+/* Brand Hover Effect (Logo + Title) */
+.navbar-brand {
+    transition: opacity 0.3s ease; /* Smoothly fades the entire brand area */
+}
+
+.navbar-brand:hover {
+    opacity: 0.75; /* Decreases visibility slightly on hover */
+}
+
+/* Animated Underline for Links */
+.nav-link, .footer-link {
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.3s ease;
+}
+
+.nav-link::after, .footer-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #059669; /* Emerald Green */
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after, .footer-link:hover::after {
+    width: 100%; /* Slides the underline out to full width */
+}
+
+/* ------------------------------------------------------------------------------------------------- */
+/* custom style for cta section */
+
+/* Hero Background Styling */
+
+.hero-section {
+    height: 80vh; /* Takes up 80% of the screen height */
+    background: linear-gradient(to right, rgba(252, 250, 248, 0.9) 30%, rgba(252, 250, 248, 0.2)),
+                url("../../images/hero-bg.jpg");
+    background-size: cover;
+    background-position: center;
+}
+/* ------------------------------------------------------------------------------------------------- */
+.text-emerald { color: #065f46; }
+
+/* Custom Emerald Buttons*/
+
+.btn-emerald {
+    background-color: #059669;
+    color: white;
+    border: none;
+    border-radius: 12px;
+}
+
+.btn-emerald:hover { background-color: #047857; color: white; }
+
+.btn-emerald-outline {
+    background-color: #f0fdf4;
+    color: #065f46;
+    border: 2px solid #059669;
+    border-radius: 12px;
+}
+
+.badge-pill .badge {
+    background-color: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #d1fae5;
+}
+/* ------------------------------------------------------------------------------------------------- */
+/* Card Customizations */
+.custom-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-top: 4px solid transparent !important;
+}
+.custom-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Individual Card Borders */
+.senior-card { border-top-color: #10b981 !important; }
+.volunteer-card { border-top-color: #059669 !important; }
+.care_home-card { border-top-color: #3b82f6 !important; }
+
+/* Icon boxes */
+.icon-box {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 1.2rem;
+}
+.bg-emerald-light { background-color: #ecfdf5; }
+.bg-blue-light { background-color: #eff6ff; }
+.text-blue { color: #3b82f6; }
+
+/* Buttons */
+.btn-emerald-dark { background-color: #047857; color: white; border: none; }
+.btn-primary-custom { background-color: #2563eb; color: white; border: none; }
+
+/* ------------------------------------------------------------------------------------------------- */
+/* Feature Section Styling */
+.rounded-4 { border-radius: 1rem !important; }
+
+.feature-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #ecfdf5; /* Light emerald background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 1.2rem;
+}
+
+.shadow-sm {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Safety Feature Card Hover Effects */
+.safety-card {
+    transition: all 0.3s ease; /* Smoothly animates transform and shadow */
+    cursor: default;
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Very subtle border */
+}
+
+.safety-card:hover {
+    transform: translateY(-8px); /* Lifts the card up */
+    background-color: #ffffff;
+    box-shadow: 0 12px 24px rgba(5, 150, 105, 0.1) !important; /* Soft emerald-tinted shadow */
+    border-color: #d1fae5; /* Changes border to light emerald on hover */
+}
+
+/* ------------------------------------------------------------------------------------------------- */
+
+/* CTA Banner Styling */
+.cta-banner {
+    background-color: #059669; /* Primary Emerald */
+    background-image: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 20%),
+                      radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 20%);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-heart-icon {
+    width: 64px;
+    height: 64px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+}
+
+/* Ensure the white button has a subtle lift on hover */
+.btn-light {
+    transition: transform 0.2s ease;
+}
+.btn-light:hover {
+    transform: translateY(-3px);
+    background-color: #ffffff;
+}
+.cta-banner {
+    position: relative;
+    overflow: hidden; /* Clips the bubbles so they don't cause scrolling */
+}
+.cta-banner::before, .cta-banner::after {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 50%;
+    z-index: 0;
+}
+.cta-banner::before { top: -100px; left: -100px; }
+.cta-banner::after { bottom: -100px; right: -100px; }
+
+.cta-banner > .container {
+    position: relative;
+    z-index: 1; /* Puts text above the bubbles */
+}
+/* ------------------------------------------------------------------------------------------------- */
+
+/* Specific color for footer links to match design */
+.footer-link {
+    color: #6b7280; /* Gray text by default */
+    text-decoration: none;
+    opacity: 0.7; /* Start slightly faded */
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+/* Footer Link Hover State */
+.footer-link:hover {
+    color: #059669; /* Turns Emerald on hover */
+    opacity: 1;    /* Increases to full visibility */
+}
