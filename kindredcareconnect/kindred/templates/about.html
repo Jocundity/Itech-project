@@ -2,9 +2,188 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}About Us - KindredConnect{% endblock %}
+{% block title %}
+    About Us - KindredConnect
+{% endblock %}
 
 {% block content %}
-<h1>About Kindred Care Connect</h1>
-    <a href="{% url 'kindred:index' %}">Return to the homepage.</a><br />
+<!-- About -->
+<section class="container p-5">
+    <h1 class="display-3 fw-bold mb-4 hero-title text-center">About Us</h1>
+    <p class="text-muted text-center">
+        KindredConnect was founded on a simple belief: no senior should feel alone.
+        We connect caring volunteers with elderly individuals in their community
+        who need companionship and assistance. 
+    </p>
+</section>
+
+<!-- Mission -->
+<section class="container-fluid p-5 bg-white">
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="display-6 fw-bold mb-3">Our Mission</h2>
+            <p class="text-muted">
+                We exist to connect seniors with compassionate volunteers who bring warmth
+                support, and companionship into their daily lives.
+            </p>
+            <p class="text-muted">
+                Loneliness among the elderly is a growing crisis.
+                KindredConnect levergaes technology to combat isolation,
+                making it simple for volunteers to find and help seniors in their community.
+            </p>
+            <p class="text-muted">
+                Every volunteer goes through background checks and verification,
+                ensuring a safe and trusted network for all participants.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <img src="{% static '/images/senior-volunteer-ipad.jpg' %}" class="img-fluid rounded" 
+            alt="A smiling senior looking at an ipad surrounded by a young man and a young woman">
+        </div>
+        
+    </div>
+    <div>
+
+    </div>
+</section>
+
+<!-- Values -->
+<section class="container-fluid p-5">
+    <h2 class="display-6 fw-bold mb-3 text-center">Our Core Values</h2>
+    <p class="text-muted text-center">
+        The principles that guide everything we do
+    </p>
+    <div class="row my-5 g-4">
+        <div class="col-md-3 text-center">
+            <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                <h3>🪪</h3>
+                <h4 class="fw-bold">Safety First</h4>
+                <p class="text-muted small mb-0">
+                    Every volunteer undergoes background checks and a vigorous verification process.
+                </p>
+            </div>
+        </div>
+    
+        <div class="col-md-3 text-center">
+            <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                <h3>❤️</h3>
+                <h4 class="fw-bold">Compassion</h4>
+                <p class="text-muted small mb-0">
+                    We believe in treating every senior with dignity, care, and respect.
+                </p>
+            </div>
+        </div>
+    
+        <div class="col-md-3 text-center">
+            <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                <h3>🫂</h3>
+                <h4 class="fw-bold">Community</h4>
+                <p class="text-muted small mb-0">
+                    We believe in building strong connections between seniors, volunteers, and partners.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-3 text-center">
+            <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                <h3>👵🏻</h3>
+                <h4 class="fw-bold">Accessibility</h4>
+                <p class="text-muted small mb-0">
+                    Our platform is built to be accessible and senior-friendly.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- People -->
+<section class="container-fluid p-5 bg-white">
+    <h2 class="display-6 fw-bold mb-3 text-center">The People Behind KindredConnect</h2>
+    <p class="text-muted text-center">
+        A dedicated team passionate about making a difference
+    </p>
+
+    <div class="row g-4 my-5">
+        <div class="col-md-4 text-center">
+            <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                <img src="{% static '/images/#' %}" class="img-fluid rounded" alt="#">
+                <h4 class="fw-bold">Aasim Ali Khan</h4>
+                <h5 class="text-emerald fw-light">Co-Founder</h5>
+                <p class="text-muted small mb-0">
+                    Our platform was awarded for outstanding social impact on the local community.
+                </p>
+            </div>
+        </div>
+    
+        <div class="col-md-4 text-center">
+            <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                <img src="{% static '/images/#' %}" class="img-fluid rounded"
+                    alt="#">
+                <h4 class="fw-bold">Xue Bai</h4>
+                <h5 class="text-emerald fw-light">Co-Founder</h5>
+                <p class="text-muted small mb-0">
+                    Our platform is consistently rated by volunteers and seniors as a trusted, life-changing platform.
+                </p>
+            </div>
+        </div>
+    
+        <div class="col-md-4 text-center">
+            <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                <img src="{% static '/images/jocelyn-and-gram.HEIC' %}" class="img-fluid rounded" alt="A young woman smiling next to her grandmother">
+                <h4 class="fw-bold">Jocelyn Sickler</h4>
+                <h5 class="text-emerald fw-light">Co-Founder</h5>
+                <p class="text-muted small mb-0">
+                    Jocelyn hopes KindredConnect can help people like her gram,
+                     Blanche, have a little bit more fun.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recognition -->
+<section class="container-fluid p-5">
+    <h2 class="display-6 fw-bold mb-3 text-center">Recognition & Impact</h2>
+    <p class="text-muted text-center">
+        Our work has been recognised by leading organisations and media outlets 
+        for creating positive social change.
+    </p>
+
+    <div class="row g-4 my-5">
+        <div class="col-md-4 text-center">
+            <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                <h3>🏆</h3>
+                <h4 class="fw-bold">Glasgow SRC Volunteering Award</h4>
+                <p class="text-muted small mb-0">
+                    Our platform was awarded for outstanding social impact on the local community.
+                </p>
+            </div>
+        </div>
+
+            <div class="col-md-4 text-center">
+                <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                    <h3>⭐</h3>
+                    <h4 class="fw-bold">4.5 out of 5 Star Rating</h4>
+                    <p class="text-muted small mb-0">
+                        Our platform is consistently rated by volunteers and seniors as a trusted, life-changing platform.
+                    </p>
+                </div>
+            </div>
+
+                <div class="col-md-4 text-center">
+                    <div class="p-4 bg-white rounded-4 shadow-sm h-100 safety-card">
+                        <h3>📰</h3>
+                        <h4 class="fw-bold">Featured in 10+ Media Outlets</h4>
+                        <p class="text-muted small mb-0">
+                            Our platform has been featured in several major news outlets including
+                            the 'BBC', 'Glasgow Guardian', and 'Glasgow Times' for our efforts to combat
+                            loneliness among seniors.
+                        </p>
+                    </div>
+                </div>
+        </div>
+</section>
+
+
+    
 {% endblock %}
