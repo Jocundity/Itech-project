@@ -1,7 +1,13 @@
+/* custom page styles */
+body {
+    background-color: #fcfaf8;
+}
+
+
 /* custom style for navbar*/
     .navbar-custom {
         background-color: #fcfaf8;
-        border-bottom: 1px solid #e5e7eb; /* Subtle line like your Mantine header */
+        border-bottom: 1px solid #e5e7eb; /* Subtle line  */
     }
     .navbar-custom .nav-link, .navbar-custom .navbar-brand {
         color: #374151; /* Darker text for readability on light background */
@@ -13,7 +19,7 @@
     position: sticky;
     top: 0;
     z-index: 1020; /* Ensures it stays above all other content */
-    background-color: rgba(252, 250, 248, 0.95); /* Slight transparency for a modern feel */
+    background-color: rgba(252, 250, 248, 0.95); /* Slight transparency */
     backdrop-filter: blur(8px); /* Frosted glass effect */
     }
 
@@ -232,4 +238,9 @@
 .footer-link:hover {
     color: #059669; /* Turns Emerald on hover */
     opacity: 1;    /* Increases to full visibility */
+}
+
+/* For sections with beige background */
+.bg-beige {
+    background-color: #fcfaf8;
 }
