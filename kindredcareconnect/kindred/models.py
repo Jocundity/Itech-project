@@ -39,6 +39,9 @@ class Activity(models.Model):
     gender_preference = models.CharField(max_length=20, blank=True)
     additional_details = models.TextField(max_length=1000, blank=True)
 
+    def __str__(self):
+        return f"{self.activity_name} ({self.category})"
+
 # --- 4. Match Results ---
 class Match(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
