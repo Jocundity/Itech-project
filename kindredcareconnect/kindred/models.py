@@ -48,4 +48,3 @@ class Match(models.Model):
     volunteer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches')
     approval_status = models.CharField(max_length=20, default='pending')
     completion_status = models.CharField(max_length=20, default='incomplete')
-
