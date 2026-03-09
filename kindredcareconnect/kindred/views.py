@@ -1,19 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
-<<<<<<< HEAD
-from .models import Activity, UserProfile
+
+from .models import Activity, UserProfile, EmergencyContact
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
-
-
-=======
-from .models import Activity
 from django.contrib.auth.decorators import login_required
-from .models import Activity, UserProfile, EmergencyContact
->>>>>>> origin/Activities
+
 
 # Create your views here.
 def index(request):
