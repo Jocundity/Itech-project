@@ -43,8 +43,8 @@
         </ul>
 
         <div class="d-flex align-items-center gap-3">
-            <a href="#" class="nav-signin fw-medium">Sign In</a>
-            <a href="#" class="btn btn-emerald px-4 rounded-pill fw-bold">Get Started</a>
+            <a href="{% url 'kindred:signin' %}" class="nav-signin fw-medium">Sign In</a>
+            <a href="{% url 'kindred:signup' %}" class="btn btn-emerald px-4 rounded-pill fw-bold">Get Started</a>
         </div>
     </div>
   </div>
@@ -72,9 +72,9 @@
             <div class="col-6 col-md-2">
                 <h6 class="fw-bold mb-3">Quick Links</h6>
                 <ul class="list-unstyled small text-muted">
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">About Us</a></li>
+                    <li class="mb-2"><a href="{% url 'kindred:about' %}" class="text-decoration-none text-reset footer-link">About Us</a></li>
                     <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Browse Activities</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Become a Volunteer</a></li>
+                    <li class="mb-2"><a href="{% url 'kindred:signup' %}" class="text-decoration-none text-reset footer-link">Become a Volunteer</a></li>
                 </ul>
             </div>
             <div class="col-6 col-md-2">

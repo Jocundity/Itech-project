@@ -329,3 +329,31 @@ body {
     }
 }
 
+/* Sign Up Form styles */
+.carehome-only-signup-fields,
+ .seniors-and-volunteers-signup-fields,
+ .council-signup-field {
+    display: none;
+}
+
+.bad-input {
+    border: 2px solid red !important;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+}
+
+/* Make sure screen reader messages aren't visible */
+.status-message {
+    position: absolute;
+    left: -9999px;
+}
+
+#username, #email, #password,
+ #confirm_password, #carehome_name, #first_name,
+ #last_name, #council_area, #address {
+    background-color: #fcfaf8 !important;
+ }
+

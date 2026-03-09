@@ -8,13 +8,21 @@ class UserProfile (models.Model):
         ('senior', 'Senior'),
         ('care_home', 'Care Home'),
     )
+
+    GENDER_CHOICES = (
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other'),
+        ('prefer_not_to_say', 'Prefer not to Say'),
+    )
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     usertype = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
     first_name = models.CharField(max_length=255, blank=True) 
     last_name = models.CharField(max_length=255, blank=True)
-    gender = models.CharField(max_length=20, blank=True)
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=True, null=True)
     council_area = models.CharField(max_length=255, blank=True)
-    living_situation = models.CharField(max_length=20, blank=True)
+    # living_situation = models.CharField(max_length=20, blank=True)
     care_home_name = models.CharField(max_length=255, blank=True)
     address = models.CharField(max_length=500, blank=True)
 
