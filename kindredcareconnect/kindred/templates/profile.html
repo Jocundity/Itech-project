@@ -1,0 +1,145 @@
+{% extends "kindred/base.html" %}
+
+{% block content %}
+<div class="bg-beige min-vh-100 pb-5">
+    
+    <section class="bg-white pt-5 pb-4 border-bottom shadow-sm">
+        <div class="container px-md-5">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-2 text-center text-lg-start mb-4 mb-lg-0">
+                    <div class="bg-light rounded-4 d-inline-flex align-items-center justify-content-center shadow-sm border" style="width: 120px; height: 120px;">
+                        <span class="fs-1">👤</span>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-7 text-center text-lg-start">
+                    <div class="d-flex flex-column flex-lg-row align-items-center gap-3 mb-2">
+                        <h1 class="display-6 fw-bold mb-0">{{ profile.first_name }} {{ profile.last_name }}</h1>
+                        <span class="badge bg-emerald-light text-emerald rounded-pill px-3 py-2 border border-emerald-subtle">
+                            {{ profile.usertype|title }}
+                        </span>
+                    </div>
+                    
+                    <div class="row g-3 mt-1 justify-content-center justify-content-lg-start">
+                        <div class="col-auto border-end pe-3">
+                            <span class="text-muted smaller d-block text-uppercase fw-bold">Email</span>
+                            <span class="small fw-medium">{{ user.email }}</span>
+                        </div>
+                        <div class="col-auto border-end pe-3">
+                            <span class="text-muted smaller d-block text-uppercase fw-bold">Location</span>
+                            <span class="small fw-medium">{{ profile.council_area }}</span>
+                        </div>
+                        <div class="col-auto">
+                            <span class="text-muted smaller d-block text-uppercase fw-bold">Joined</span>
+                            <span class="small fw-medium">Jan 2025</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-3 text-center text-lg-end mt-4 mt-lg-0">
+                    <button class="btn btn-emerald px-4 rounded-pill fw-bold shadow-sm">Edit Profile</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% if profile.usertype == 'senior' %}
+    <section class="py-5">
+        <div class="container px-md-5">
+            <h3 class="fw-bold h4 mb-4 text-center text-lg-start">Emergency Contact</h3>
+            <div class="card border-0 shadow-sm rounded-4 safety-card p-4">
+                {% if emergency_contact %}
+                <div class="row text-center text-lg-start g-4">
+                    <div class="col-md-4 border-lg-end">
+                        <p class="text-muted small mb-1">Contact Name</p>
+                        <h5 class="fw-bold mb-0">{{ emergency_contact.name }}</h5>
+                    </div>
+                    <div class="col-md-4 border-lg-end">
+                        <p class="text-muted small mb-1">Relationship</p>
+                        <h5 class="fw-bold mb-0">{{ emergency_contact.relationship }}</h5>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="text-muted small mb-1">Mobile Number</p>
+                        <h5 class="fw-bold text-emerald mb-0">{{ emergency_contact.mobile }}</h5>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center py-3">
+                    <p class="text-muted mb-0 small">No emergency contact information provided.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <section class="py-5">
+        <div class="container px-md-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold h4 mb-0">My Activity History</h3>
+                <span class="badge bg-white text-muted border rounded-pill px-3">{{ my_matches|length }} Activities</span>
+            </div>
+
+            <div id="activity-history-list">
+                {% if not my_matches %}
+                <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white">
+                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                        <span class="fs-1">🗓️</span>
+                    </div>
+                    <h5 class="fw-bold text-muted">No activities yet</h5>
+                    <p class="text-muted small mb-4">You haven't joined any activities. Explore the community today!</p>
+                    <div>
+                        <a href="/kindred/activities/" class="btn btn-emerald rounded-pill px-4 fw-bold">Browse Activities</a>
+                    </div>
+                </div>
+                {% else %}
+                {% for match in my_matches %}
+                <div class="card border-0 shadow-sm rounded-4 safety-card mb-3">
+                    <div class="card-body p-4">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-12 col-lg-4">
+                                <h5 class="fw-bold mb-1">{{ match.activity.activity_name }}</h5>
+                                <p class="text-muted smaller mb-0">{{ match.activity.category }}</p>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <div class="row text-center text-lg-start">
+                                    <div class="col-4 border-end">
+                                        <span class="text-muted smaller d-block">Status</span>
+                                        <span class="small fw-bold text-emerald">{{ match.approval_status|title }}</span>
+                                    </div>
+                                    <div class="col-4 border-end">
+                                        <span class="text-muted smaller d-block">Date</span>
+                                        <span class="small fw-medium">{{ match.activity.date }}</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <span class="text-muted smaller d-block">Time</span>
+                                        <span class="small fw-medium">{{ match.activity.time }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-2 d-flex justify-content-center justify-content-lg-end">
+                                <button class="btn btn-light btn-sm px-3 border shadow-sm rounded-pill small">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    .bg-beige { background-color: #fcfaf8; }
+    .btn-emerald { background-color: #2e7d32; color: white; border: none; }
+    .btn-emerald:hover { background-color: #1b5e20; color: white; }
+    .text-emerald { color: #2e7d32; }
+    .bg-emerald-light { background-color: #e8f5e9; }
+    .safety-card { transition: transform 0.2s; background: white; }
+    .safety-card:hover { transform: translateY(-3px); }
+    .smaller { font-size: 0.8rem; }
+    .border-lg-end { border-right: 1px solid #dee2e6; }
+    @media (max-width: 991px) { .border-lg-end { border-right: none; border-bottom: 1px solid #dee2e6; padding-bottom: 15px; } }
+</style>
+{% endblock %}

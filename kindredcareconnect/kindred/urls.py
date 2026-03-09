@@ -12,4 +12,5 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('check-username-exists/', views.check_username_exists, name='check_username_exists'),
     path('signin/', views.signin, name='signin'),
+    path('profile/', views.profile, name='profile'),
 ]
