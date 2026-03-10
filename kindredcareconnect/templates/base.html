@@ -39,12 +39,44 @@
             <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:index' %}">Home</a></li>
             <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:about' %}">About</a></li>
             <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:activities' %}">Activities</a></li>
-            <li class="nav-item"><a class="nav-link px-3" href="#">Profile</a></li>
+            <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:profile' %}">Profile</a></li>
         </ul>
 
-        <div class="d-flex align-items-center gap-3">
+        <!-- <div class="d-flex align-items-center gap-3">
             <a href="{% url 'kindred:signin' %}" class="nav-signin fw-medium">Sign In</a>
             <a href="{% url 'kindred:signup' %}" class="btn btn-emerald px-4 rounded-pill fw-bold">Get Started</a>
+        </div> -->
+
+        <!-- Show profile icon if user is signed in else show the buttons -->
+        <div class="d-flex align-items-center gap-3">
+            {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="bg-emerald-light rounded-circle d-flex align-items-center justify-content-center border border-emerald-subtle shadow-sm" style="width: 40px; height: 40px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#059669" class="bi bi-person-fill" viewBox="0 0 16 16">
+                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                            </svg>
+                        </div>
+                        <span class="ms-2 fw-medium text-dark d-none d-md-inline">{{ user.username }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 mt-2" aria-labelledby="profileDropdown">
+                        <li><a class="dropdown-item py-2" href="{% url 'kindred:profile' %}">📊 My Profile</a></li>
+                        <li><a class="dropdown-item py-2" href="{% url 'kindred:activities' %}">🔍 Browse Activities</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <form method="post" action="{% url 'kindred:logout' %}" class="px-3">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item py-2 text-danger border-0 bg-transparent p-0">
+                                    🚪 Log Out
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            {% else %}
+                <a href="{% url 'kindred:signin' %}" class="nav-signin">Sign In</a>
+                <a href="{% url 'kindred:signup' %}" class="btn btn-emerald rounded-pill px-4 fw-bold">Get Started</a>
+            {% endif %}
         </div>
     </div>
   </div>

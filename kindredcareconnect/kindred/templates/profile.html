@@ -1,4 +1,9 @@
-{% extends "kindred/base.html" %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Profile - KindredConnect
+{% endblock %}
 
 {% block content %}
 <div class="bg-beige min-vh-100 pb-5">
@@ -8,7 +13,9 @@
             <div class="row align-items-center">
                 <div class="col-12 col-lg-2 text-center text-lg-start mb-4 mb-lg-0">
                     <div class="bg-light rounded-4 d-inline-flex align-items-center justify-content-center shadow-sm border" style="width: 120px; height: 120px;">
-                        <span class="fs-1">👤</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#059669" class="bi bi-person-fill" viewBox="0 0 16 16">
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                        </svg>
                     </div>
                 </div>
 
@@ -130,16 +137,4 @@
     </section>
 </div>
 
-<style>
-    .bg-beige { background-color: #fcfaf8; }
-    .btn-emerald { background-color: #2e7d32; color: white; border: none; }
-    .btn-emerald:hover { background-color: #1b5e20; color: white; }
-    .text-emerald { color: #2e7d32; }
-    .bg-emerald-light { background-color: #e8f5e9; }
-    .safety-card { transition: transform 0.2s; background: white; }
-    .safety-card:hover { transform: translateY(-3px); }
-    .smaller { font-size: 0.8rem; }
-    .border-lg-end { border-right: 1px solid #dee2e6; }
-    @media (max-width: 991px) { .border-lg-end { border-right: none; border-bottom: 1px solid #dee2e6; padding-bottom: 15px; } }
-</style>
 {% endblock %}

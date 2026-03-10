@@ -124,3 +124,6 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# This tells the @login_required decorator where to redirect (when not signed in)
+LOGIN_URL = 'kindred:signin'

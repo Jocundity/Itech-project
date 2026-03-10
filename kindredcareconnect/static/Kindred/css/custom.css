@@ -356,3 +356,38 @@ body {
  #last_name, #council_area, #address {
     background-color: #fcfaf8 !important;
  }
+
+/* Profile page Styles -------------------------------------------------------------*/
+
+    .bg-beige { background-color: #fcfaf8; }
+    .btn-emerald { background-color: #2e7d32; color: white; border: none; }
+    .btn-emerald:hover { background-color: #1b5e20; color: white; }
+    .text-emerald { color: #2e7d32; }
+    .bg-emerald-light { background-color: #e8f5e9; }
+    .safety-card { transition: transform 0.2s; background: white; }
+    .safety-card:hover { transform: translateY(-3px); }
+    .smaller { font-size: 0.8rem; }
+    .border-lg-end { border-right: 1px solid #dee2e6; }
+    @media (max-width: 991px) { .border-lg-end { border-right: none; border-bottom: 1px solid #dee2e6; padding-bottom: 15px; } }
+
+    /* ---------------------------------------------------------------------------------- */
+
+ /* Styling for the new Navbar Profile Dropdown */
+#profileDropdown {
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f0fdf4; /* Light emerald tint on hover */
+    color: #059669;
+}
+
+.dropdown-toggle::after {
+    display: none; /* Removes the default arrow for a cleaner look */
+}
+
+/* Sign in - Dont have an account */
+.hover-underline:hover {
+    text-decoration: underline !important;
+    color: #047857; /* Slightly darker emerald on hover */
+}

@@ -72,7 +72,7 @@ def signup(request):
             address = address
         )
 
-        return redirect("kindred:login")
+        return redirect("kindred:signin")
 
 
     return render(request, "signup.html")
@@ -93,12 +93,22 @@ def signin(request):
 
         if user is not None:
             auth_login(request, user)
+            
+            # Check if there is a 'next' parameter in the URL 
+            # (this is to let user navigate to the page they were trying to access instead of default activities before signing in)
+            next_url = request.GET.get('next')
+            if next_url:
+                return redirect(next_url)
+            
+            # Default fallback if no 'next' is found
             return redirect("kindred:activities")
         else:
             messages.error(request, "Invalid username or password")
             return render(request, "signin.html")
 
     return render(request, "signin.html")
+
+# Profile view (login required -- by default sends to sign in page)
 @login_required
 def profile(request):
     # 1.Get user profile 
@@ -121,4 +131,4 @@ def profile(request):
         'my_matches': my_matches,
     }
     
-    return render(request, 'kindred/profile.html', context=context_dict)
+    return render(request, 'profile.html', context=context_dict)
