@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Sign Up - KindredConnect
+{% endblock %}
+
+{% block content %}
+<section>
+    <div class="container p-5">
+        <div class="container text-center mb-3">
+            <h1 class="fw-bold">
+                <span class="fw-light">Join</span><br>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="#059669" class="me-2">
+                    <path
+                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z">
+                    </path>
+                </svg>
+                KindredConnect</h1>
+        </div>
+        
+        <!-- Form -->
+        <div class="container-fluid p-3">
+            <div class="row justify-content-center">
+                <div class="col-sm-10 col-md-6 col-lg-5 mx-auto">
+                    <div class="border p-4 rounded shadow-sm bg-white signup-form">
+                    
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                    
+                            <h5>Choose your role:</h5>
+                            <div id="usertype-sign-up" class="form-group mb-3">
+                                <label class="form-check-label me-5">
+                                    <input type="radio" name="usertype" value="senior" id="senior" class="form-check-input" required>
+                                    Senior
+                                </label>
+                    
+                                <label class="form-check-label me-5">
+                                    <input type="radio" name="usertype" value="volunteer" id="volunteer" class="form-check-input">
+                                    Volunteer
+                                </label>
+                    
+                                <label class="form-check-label">
+                                    <input type="radio" name="usertype" value="care_home" id="care_home" class="form-check-input">
+                                    Care Home
+                                </label>
+                            </div>
+                    
+                    
+                            <div class="form-field form-group mb-3">
+                                <label for="username" class="form-label">User name: </label>
+                                <input type="text" id="username" name="username"
+                                    class="form-control rounded-pill bg-white shadow-sm border p-1" required>
+                                <p id="username-status"></p>
+                    
+                            </div>
+                    
+                            <div class="form-field form-group mb-3">
+                                <label for="email" class="form-label">E-mail: </label>
+                                <input type="email" id="email" name="email" class="form-control rounded-pill bg-white shadow-sm border p-1"
+                                    required>
+                            </div>
+                    
+                            <div class="form-field form-group mb-3">
+                                <label for="password" class="form-label">Password: </label>
+                                <input type="password" id="password" name="password"
+                                    class="form-control rounded-pill bg-white shadow-sm border p-1" required>
+                            </div>
+                    
+                            <div class="form-field form-group mb-3">
+                                <label for="confirm_password" class="form-label">Confirm Password: </label>
+                                <input type="password" id="confirm_password" name="confirm_password"
+                                    class="form-control rounded-pill bg-white shadow-sm border p-1" required>
+                            </div>
+                    
+                    
+                            <!-- For Care Homes only -->
+                            <div class="carehome-only-signup-fields">
+                                <div class="form-field form-group mb-3">
+                                    <label for="care_home_name" class="form-label">Care Home Name: </label>
+                                    <input type="text" id="care_home_name" name="care_home_name"
+                                        class="form-control rounded-pill bg-white shadow-sm border p-1">
+                                </div>
+                            </div>
+                    
+                            <!-- For Seniors and Volunteers -->
+                            <div class="seniors-and-volunteers-signup-fields">
+                                <div class="form-field form-group mb-3">
+                                    <label for="first_name" class="form-label"> First Name: </label>
+                                    <input type="text" id="first_name" name="first_name"
+                                        class="form-control rounded-pill bg-white shadow-sm border p-1">
+                                </div>
+                    
+                                <div class="form-field form-group mb-3">
+                                    <label for="last_name" class="form-label"> Last Name: </label>
+                                    <input type="text" id="last_name" name="last_name"
+                                        class="form-control rounded-pill bg-white shadow-sm border p-1">
+                                </div>
+                    
+                                <h5>Gender:</h5>
+                                <div class="form-group mb-3">
+                                    <label class="form-check-label me-3">
+                                        <input type="radio" name="gender" value="male" class="form-check-input">
+                                        Male
+                                    </label>
+                    
+                                    <label class="form-check-label me-3">
+                                        <input type="radio" name="gender" value="female" class="form-check-input">
+                                        Female
+                                    </label>
+                    
+                                    <label class="form-check-label me-3">
+                                        <input type="radio" name="gender" value="other" class="form-check-input">
+                                        Other
+                                    </label>
+                    
+                                    <label class="form-check-label">
+                                        <input type="radio" name="gender" value="prefer_not_to_say" class="form-check-input">
+                                        Prefer not to say
+                                    </label>
+                                </div>
+                    
+                            </div>
+                    
+                    
+                            <!-- For All User Types -->
+                            <div class="council-signup-field">
+                                <div class="form-field form-group mb-3">
+                                    <label for="council_area" class="form-label">Council Area: </label>
+                                    <select id="council_area" name="council_area" class="form-select rounded-pill bg-white shadow-sm border p-1" required>
+                                        <option value="aberdeen_city">Aberdeen City</option>
+                                        <option value="aberdeenshire">Aberdeenshire</option>
+                                        <option value="angus">Angus</option>
+                                        <option value="argyll_and_bute">Argyll and Bute</option>
+                                        <option value="clackmannanshire">Clackmannanshire</option>
+                                        <option value="dumfries_and_galloway">Dumfries and Galloway</option>
+                                        <option value="dundee_city">Dundee City</option>
+                                        <option value="east_ayrshire">East Ayrshire</option>
+                                        <option value="east_dunbartonshire">East Dunbartonshire</option>
+                                        <option value="east_lothian">East Lothian</option>
+                                        <option value="east_renfrewshire">East Renfrewshire</option>
+                                        <option value="city_of_edinburgh">City of Edinburgh</option>
+                                        <option value="falkirk">Falkirk</option>
+                                        <option value="fife">Fife</option>
+                                        <option value="glasgow_city">Glasgow City</option>
+                                        <option value="highland">Higland</option>
+                                        <option value="inverclyde">Inverclyde</option>
+                                        <option value="midlothian">Midlothian</option>
+                                        <option value="moray">Moray</option>
+                                        <option value="na_h-eileanan_siar_(western_isles)">Na h-Eileanan Siar (Western Isles)</option>
+                                        <option value="north_ayrshire">North Ayrshire</option>
+                                        <option value="north_lanarkshire">North Lanarkshire</option>
+                                        <option value="orkney">Orkney</option>
+                                        <option value="perth_and_kinross">Perth and Kinross</option>
+                                        <option value="renfrewshire">Renfrewshire</option>
+                                        <option value="scottish_borders">Scottish Borders</option>
+                                        <option value="shetland_islands">Shetland Islands</option>
+                                        <option value="south_ayrshire">South Ayrshire</option>
+                                        <option value="south_lanarkshire">South Lanarkshire</option>
+                                        <option value="stirling">Stirling</option>
+                                        <option value="west_dunbartonshire">West Dunbartonshire</option>
+                                        <option value="west_lothian">West Lothian</option>
+                                    </select>
+                                </div>
+                            </div>
+                    
+                            <!-- For Care Homes only -->
+                            <div class="carehome-only-signup-fields">
+                                <div class="form-field form-group mb-3">
+                                    <label for="address" class="form-label">Address: </label>
+                                    <input type="text" id="address" name="address"
+                                        class="form-control rounded-pill bg-white shadow-sm border p-1">
+                                </div>
+                            </div>
+                    
+                    
+                            <br>
+                    
+                            <button type="submit" class="btn btn-emerald px-4 rounded-pill fw-bold w-100">Submit</button>
+                        </form>
+
+                        <!-- Already Have an account ? -->
+                         <div class="text-center mt-4 pt-3 border-top">
+                            <p class="text-muted small mb-0">
+                                Already have an account? 
+                                <a href="{% url 'kindred:signin' %}" class="text-emerald fw-bold text-decoration-none hover-underline d-inline-flex align-items-center">
+                                    Sign in
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+    </div>
+</section>
+
+<!-- Javascript for form field showing and validation -->
+<script src="{% static 'kindred/js/signup.js' %}"></script>
+{% endblock %}
+

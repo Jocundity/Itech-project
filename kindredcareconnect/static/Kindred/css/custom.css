@@ -36,7 +36,7 @@ body {
 
 .nav-signin:hover {
     background-color: #059669; /* Full Emerald green background */
-    color: #ffffff !important; /* White text on hover */
+    color: #ffffff ; /* White text on hover */
     box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2); /* Subtle glow */
 }
 
@@ -113,17 +113,17 @@ body {
 /* Card Customizations */
 .custom-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border-top: 4px solid transparent !important;
+    border-top: 4px solid transparent ;
 }
 .custom-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) ;
 }
 
 /* Individual Card Borders */
-.senior-card { border-top-color: #10b981 !important; }
-.volunteer-card { border-top-color: #059669 !important; }
-.care_home-card { border-top-color: #3b82f6 !important; }
+.senior-card { border-top-color: #10b981 ; }
+.volunteer-card { border-top-color: #059669 ; }
+.care_home-card { border-top-color: #3b82f6 ; }
 
 /* Icon boxes */
 .icon-box {
@@ -145,7 +145,7 @@ body {
 
 /* ------------------------------------------------------------------------------------------------- */
 /* Feature Section Styling */
-.rounded-4 { border-radius: 1rem !important; }
+.rounded-4 { border-radius: 1rem ; }
 
 .feature-icon {
     width: 40px;
@@ -159,7 +159,7 @@ body {
 }
 
 .shadow-sm {
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) ;
 }
 
 /* Safety Feature Card Hover Effects */
@@ -172,7 +172,7 @@ body {
 .safety-card:hover {
     transform: translateY(-8px); /* Lifts the card up */
     background-color: #ffffff;
-    box-shadow: 0 12px 24px rgba(5, 150, 105, 0.1) !important; /* Soft emerald-tinted shadow */
+    box-shadow: 0 12px 24px rgba(5, 150, 105, 0.1) ; /* Soft emerald-tinted shadow */
     border-color: #d1fae5; /* Changes border to light emerald on hover */
 }
 
@@ -243,4 +243,153 @@ body {
 /* For sections with beige background */
 .bg-beige {
     background-color: #fcfaf8;
+}
+
+/* ------------------------------------------------------------------------------------------------- */
+
+/* Custom Style for activities page */
+
+
+.category-filter {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb ; /* Default subtle border */
+    border-radius: 1rem;
+    padding: 1.25rem 2rem; 
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: fit-content; /* Dynamically fits long words */
+    flex: 0 0 auto;
+}
+
+/* Hover State */
+.category-filter:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(5, 150, 105, 0.1) ;
+}
+
+/* Fix for disappearing top border */
+.active-category {
+    border: 2px solid #059669 ; /* Force green border on all sides */
+    background-color: #f0fdf4 ;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(5, 150, 105, 0.15) ;
+}
+
+.active-category .smaller {
+    color: #059669 ;
+}
+
+/* Ensures text never wraps or clips */
+.text-nowrap {
+    white-space: nowrap ;
+}
+
+/* 2. Redact Button: Size increase and shadow on hover */
+.redact-pop {
+    background-color: #ef4444 ;
+    color: white ;
+    transition: all 0.2s ease-in-out;
+}
+
+.redact-pop:hover {
+    transform: scale(1.1); /* The 'Pop' effect */
+    background-color: #dc2626 ;
+    box-shadow: 0 8px 15px rgba(220, 38, 38, 0.3) ;
+}
+
+/* 3. General UI Polish */
+.bg-beige { 
+    background-color: #fcfaf8 ; 
+}
+
+.bg-emerald-light { 
+    background-color: #ecfdf5 ; 
+}
+
+/* Specific hover for 'View Details' to match Emerald theme */
+.btn-outline-secondary:hover {
+    background-color: #059669 ;
+    border-color: #059669 ;
+    color: #ffffff ;
+}
+
+/* 4. Scrollbar: Hidden but functional for categories */
+.custom-scrollbar::-webkit-scrollbar {
+    height: 0px; 
+}
+
+@media (max-width: 767px) {
+    .border-md-start {
+        border-left: none !important;
+    }
+    /* Centers everything on mobile for a cleaner look */
+    .safety-card {
+        text-align: center;
+    }
+}
+
+/* Sign Up Form styles */
+.carehome-only-signup-fields,
+ .seniors-and-volunteers-signup-fields,
+ .council-signup-field {
+    display: none;
+}
+
+.bad-input {
+    border: 2px solid red !important;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+}
+
+/* Make sure screen reader messages aren't visible */
+.status-message {
+    position: absolute;
+    left: -9999px;
+}
+
+#username, #email, #password,
+ #confirm_password, #care_home_name, #first_name,
+ #last_name, #council_area, #address {
+    background-color: #fcfaf8 !important;
+ }
+
+
+
+/* Profile page Styles -------------------------------------------------------------*/
+
+    .bg-beige { background-color: #fcfaf8; }
+    .btn-emerald { background-color: #2e7d32; color: white; border: none; }
+    .btn-emerald:hover { background-color: #1b5e20; color: white; }
+    .text-emerald { color: #2e7d32; }
+    .bg-emerald-light { background-color: #e8f5e9; }
+    .safety-card { transition: transform 0.2s; background: white; }
+    .safety-card:hover { transform: translateY(-3px); }
+    .smaller { font-size: 0.8rem; }
+    .border-lg-end { border-right: 1px solid #dee2e6; }
+    @media (max-width: 991px) { .border-lg-end { border-right: none; border-bottom: 1px solid #dee2e6; padding-bottom: 15px; } }
+
+    /* ---------------------------------------------------------------------------------- */
+
+ /* Styling for the new Navbar Profile Dropdown */
+#profileDropdown {
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f0fdf4; /* Light emerald tint on hover */
+    color: #059669;
+}
+
+.dropdown-toggle::after {
+    display: none; /* Removes the default arrow for a cleaner look */
+}
+
+/* Sign in - Dont have an account */
+.hover-underline:hover {
+    text-decoration: underline !important;
+    color: #047857; /* Slightly darker emerald on hover */
 }
