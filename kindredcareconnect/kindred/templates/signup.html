@@ -23,7 +23,7 @@
         <div class="container-fluid p-3">
             <div class="row justify-content-center">
                 <div class="col-sm-10 col-md-6 col-lg-5 mx-auto">
-                    <div class="border p-4 rounded shadow-sm bg-white">
+                    <div class="border p-4 rounded shadow-sm bg-white signup-form">
                     
                         <form method="post" novalidate>
                             {% csrf_token %}
@@ -127,8 +127,40 @@
                             <div class="council-signup-field">
                                 <div class="form-field form-group mb-3">
                                     <label for="council_area" class="form-label">Council Area: </label>
-                                    <input type="text" id="council_area" name="council_area"
-                                        class="form-control rounded-pill bg-white shadow-sm border p-1" required>
+                                    <select id="council_area" name="council_area" class="form-select rounded-pill bg-white shadow-sm border p-1" required>
+                                        <option value="aberdeen_city">Aberdeen City</option>
+                                        <option value="aberdeenshire">Aberdeenshire</option>
+                                        <option value="angus">Angus</option>
+                                        <option value="argyll_and_bute">Argyll and Bute</option>
+                                        <option value="clackmannanshire">Clackmannanshire</option>
+                                        <option value="dumfries_and_galloway">Dumfries and Galloway</option>
+                                        <option value="dundee_city">Dundee City</option>
+                                        <option value="east_ayrshire">East Ayrshire</option>
+                                        <option value="east_dunbartonshire">East Dunbartonshire</option>
+                                        <option value="east_lothian">East Lothian</option>
+                                        <option value="east_renfrewshire">East Renfrewshire</option>
+                                        <option value="city_of_edinburgh">City of Edinburgh</option>
+                                        <option value="falkirk">Falkirk</option>
+                                        <option value="fife">Fife</option>
+                                        <option value="glasgow_city">Glasgow City</option>
+                                        <option value="highland">Higland</option>
+                                        <option value="inverclyde">Inverclyde</option>
+                                        <option value="midlothian">Midlothian</option>
+                                        <option value="moray">Moray</option>
+                                        <option value="na_h-eileanan_siar_(western_isles)">Na h-Eileanan Siar (Western Isles)</option>
+                                        <option value="north_ayrshire">North Ayrshire</option>
+                                        <option value="north_lanarkshire">North Lanarkshire</option>
+                                        <option value="orkney">Orkney</option>
+                                        <option value="perth_and_kinross">Perth and Kinross</option>
+                                        <option value="renfrewshire">Renfrewshire</option>
+                                        <option value="scottish_borders">Scottish Borders</option>
+                                        <option value="shetland_islands">Shetland Islands</option>
+                                        <option value="south_ayrshire">South Ayrshire</option>
+                                        <option value="south_lanarkshire">South Lanarkshire</option>
+                                        <option value="stirling">Stirling</option>
+                                        <option value="west_dunbartonshire">West Dunbartonshire</option>
+                                        <option value="west_lothian">West Lothian</option>
+                                    </select>
                                 </div>
                             </div>
                     

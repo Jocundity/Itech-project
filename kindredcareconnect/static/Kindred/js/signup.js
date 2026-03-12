@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
             for (const field of careHomeOnlyFields) {
                 field.style.display = "block";
             }
+            
 
             for (const field of seniorAndVolunteerFields) {
                 field.style.display = "none";

@@ -352,10 +352,12 @@ body {
 }
 
 #username, #email, #password,
- #confirm_password, #carehome_name, #first_name,
+ #confirm_password, #care_home_name, #first_name,
  #last_name, #council_area, #address {
     background-color: #fcfaf8 !important;
  }
+
+
 
 /* Profile page Styles -------------------------------------------------------------*/
 
