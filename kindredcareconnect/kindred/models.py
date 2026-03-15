@@ -60,6 +60,7 @@ class UserProfile (models.Model):
     # living_situation = models.CharField(max_length=20, blank=True)
     care_home_name = models.CharField(max_length=255, blank=True)
     address = models.CharField(max_length=500, blank=True)
+    profile_picture = models.ImageField(upload_to="profile_pics", null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username} ({self.usertype})"
@@ -70,6 +71,9 @@ class EmergencyContact(models.Model):
     name = models.CharField(max_length=255)
     mobile = models.CharField(max_length=15)
     relationship = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.name}"
 
 # --- 3. Activity ---
 class Activity(models.Model):
