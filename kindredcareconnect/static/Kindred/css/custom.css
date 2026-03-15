@@ -372,6 +372,26 @@ body {
     .border-lg-end { border-right: 1px solid #dee2e6; }
     @media (max-width: 991px) { .border-lg-end { border-right: none; border-bottom: 1px solid #dee2e6; padding-bottom: 15px; } }
 
+    #emergency-contact-form { display: none; }
+    #profile-message {
+        background-color: #065f46 !important;
+        width: 100% !important;
+        padding: 15px 0 !important;
+    }
+    #profile-message p {
+        color: white !important;
+        font-weight: bold !important;
+        margin: 0 !important;
+    }
+    .profile_pic {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+
+    
+
     /* ---------------------------------------------------------------------------------- */
 
  /* Styling for the new Navbar Profile Dropdown */

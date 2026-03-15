@@ -52,10 +52,14 @@
             {% if user.is_authenticated %}
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="bg-emerald-light rounded-circle d-flex align-items-center justify-content-center border border-emerald-subtle shadow-sm" style="width: 40px; height: 40px;">
+                        <div class="bg-emerald-light rounded-circle d-flex align-items-center justify-content-center border border-emerald-subtle shadow-sm overflow-hidden" style="width: 40px; height: 40px;">
+                            {% if user.userprofile.profile_picture %}
+                            <img class="profile_pic" src="{{ user.userprofile.profile_picture.url }}" alt="Profile Picture">
+                            {% else %}
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#059669" class="bi bi-person-fill" viewBox="0 0 16 16">
                                 <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
                             </svg>
+                            {% endif %}
                         </div>
                         <span class="ms-2 fw-medium text-dark d-none d-md-inline">{{ user.username }}</span>
                     </a>
@@ -96,12 +100,18 @@
     <div class="container px-md-5">
         <div class="row g-4">
             <div class="col-md-4">
-                <a class="navbar-brand fw-bold text-success d-flex align-items-center mb-3" href="#">
-                    <span class="me-2">💚</span> KindredConnect
+                <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'kindred:index' %}">
+                    <span class="me-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#059669" class="me-2">
+                            <path
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                    </span>
+                    KindredConnect
                 </a>
                 <p class="text-muted small" style="max-width: 250px;">Bridging the gap in elderly care through compassion, connection, and community.</p>
             </div>
-            <div class="col-6 col-md-2">
+            <div class="col-6 col-md-4 text-md-center">
                 <h6 class="fw-bold mb-3">Quick Links</h6>
                 <ul class="list-unstyled small text-muted">
                     <li class="mb-2"><a href="{% url 'kindred:about' %}" class="text-decoration-none text-reset footer-link">About Us</a></li>
@@ -109,15 +119,7 @@
                     <li class="mb-2"><a href="{% url 'kindred:signup' %}" class="text-decoration-none text-reset footer-link">Become a Volunteer</a></li>
                 </ul>
             </div>
-            <div class="col-6 col-md-2">
-                <h6 class="fw-bold mb-3">Support</h6>
-                <ul class="list-unstyled small text-muted">
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Help Center</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Privacy Policy</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Terms of Service</a></li>
-                </ul>
-            </div>
-            <div class="col-md-4">
+            <div class="col-6 col-md-4 text-md-end">
                 <h6 class="fw-bold mb-3">Contact Us</h6>
                 <ul class="list-unstyled small text-muted">
                     <li class="mb-2">📞 0800 KINDRED</li>

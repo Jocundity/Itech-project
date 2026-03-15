@@ -244,18 +244,15 @@ document.addEventListener("DOMContentLoaded", function () {
             })
     })
 
-    // --- NEW ROLE SELECTION LOGIC ---
-    // 1. Get role from URL (e.g., ?role=senior)
+    // Pre-fill roles 
     const urlParams = new URLSearchParams(window.location.search);
     const roleParam = urlParams.get('role');
 
     if (roleParam) {
-        // 2. Find the specific radio button
         const targetRadio = document.querySelector(`input[name="usertype"][value="${roleParam}"]`);
         
         if (targetRadio) {
             targetRadio.checked = true;
-            // 3. Manually call the teammate's function to reveal the fields
             showFields(); 
         }
     }

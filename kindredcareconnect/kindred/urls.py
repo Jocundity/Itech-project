@@ -14,5 +14,7 @@ urlpatterns = [
     path('check-username-exists/', views.check_username_exists, name='check_username_exists'),
     path('signin/', views.signin, name='signin'),
     path('profile/', views.profile, name='profile'),
+    path('delete-emergency-contact/<int:contact_id>/', views.delete_emergency_contact, name='delete_emergency_contact'),
+    path('edit-profile/', views.edit_profile, name='edit_profile'),
     path('logout/', auth_views.LogoutView.as_view(next_page='kindred:index'), name='logout'),
 ]
