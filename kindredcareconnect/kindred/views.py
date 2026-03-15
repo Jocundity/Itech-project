@@ -8,7 +8,7 @@ from django.db import IntegrityError
 from django.contrib.auth import authenticate, login as auth_login, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from .models import Activity, Match
 from .forms import EmergencyContactForm
 
 
@@ -262,3 +262,36 @@ def edit_profile(request):
             "profile": profile,
             "council_area_choices": COUNCIL_AREA_CHOICES
             })
+
+
+@login_required
+def activity_detail(request, pk):
+    # collect activity details 
+    activity = get_object_or_404(Activity, pk=pk)
+    
+    # check if the user has already requested to join this activity, if so, the button on the frontend will show as "Pending" and be disabled
+    has_requested = False
+    if request.user.is_authenticated:
+        # status='pending' means the user has requested to join but the request has not been approved yet. We can further enhance this by showing different status such as 'approved' or 'rejected' in the future.
+        has_requested = Match.objects.filter(volunteer=request.user, activity=activity, status='pending').exists()
+
+    context = {
+        'activity': activity,
+        'has_requested': has_requested,
+    }
+    return render(request, 'kindred/activity_detail.html', context)
+
+@login_required
+def join_activity(request, pk):
+    #  "Request to Join" 
+    if request.method == "POST":
+        activity = get_object_or_404(Activity, pk=pk)
+        
+        # create a Match entry with status 'pending'. If the user has already requested to join, it will not create a duplicate entry due to get_or_create.
+        Match.objects.get_or_create(
+            volunteer=request.user,
+            activity=activity,
+            defaults={'status': 'pending'}
+        )
+    # after requesting to join, redirect back to the activity detail page (you can also choose to redirect to a different page if needed)
+    return redirect('activity_detail', pk=pk)

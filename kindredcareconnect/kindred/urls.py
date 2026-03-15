@@ -17,4 +17,6 @@ urlpatterns = [
     path('delete-emergency-contact/<int:contact_id>/', views.delete_emergency_contact, name='delete_emergency_contact'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
     path('logout/', auth_views.LogoutView.as_view(next_page='kindred:index'), name='logout'),
+    path('activity/<int:pk>/', views.activity_detail, name='activity_detail'),
+    path('activity/<int:pk>/join/', views.join_activity, name='join_activity'),
 ]
