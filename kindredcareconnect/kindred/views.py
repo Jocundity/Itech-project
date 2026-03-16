@@ -663,3 +663,70 @@ def get_user_profile_json(request, user_id):
             data['address'] = target_profile.address
             
     return JsonResponse(data)
+
+
+
+# Updated views.py
+
+@login_required
+@require_POST
+def withdraw_application(request, match_id):
+    """Handles withdrawal from the Profile Page using a Match ID."""
+    match = get_object_or_404(Match, id=match_id, volunteer=request.user, approval_status='pending')
+    activity = match.activity
+
+    try:
+        data = json.loads(request.body)
+        custom_reason = data.get('reason', "").strip() or "Volunteer withdrew application."
+    except (json.JSONDecodeError, TypeError):
+        custom_reason = "Volunteer withdrew application."    
+    
+    # 1. Notify the Senior/Care Home
+    Notification.objects.create(
+        user=activity.requester,
+        message=f"Volunteer {request.user.username} has withdrawn their application for '{activity.activity_name}'.",
+        activity=activity
+    )
+    
+    # 2. Persist the record in history instead of deleting
+    match.completion_status = 'cancelled'
+    match.cancelled_by = request.user
+    match.cancellation_reason = custom_reason
+    match.save()
+    
+    return JsonResponse({'status': 'success'})
+
+@login_required
+@require_POST
+def withdraw_by_activity(request, activity_id):
+    """Handles withdrawal from the Browse Page using the Activity ID."""
+    # Add approval_status='pending' to ensure we only get the active application
+    match = get_object_or_404(
+        Match, 
+        activity_id=activity_id, 
+        volunteer=request.user, 
+        approval_status='pending', # CRITICAL: Only target the live application
+        completion_status='incomplete' # Also ensure it hasn't been finished
+    )
+    
+    # Notify the requester
+    Notification.objects.create(
+        user=match.activity.requester,
+        message=f"Volunteer {request.user.username} has withdrawn their application for '{match.activity.activity_name}'.",
+        activity=match.activity
+    )
+    
+    # Parse the reason from JSON
+    try:
+        data = json.loads(request.body)
+        custom_reason = data.get('reason', "").strip() or "Volunteer withdrew application."
+    except (json.JSONDecodeError, TypeError):
+        custom_reason = "Volunteer withdrew application."
+
+    # Move to history
+    match.completion_status = 'cancelled'
+    match.cancelled_by = request.user
+    match.cancellation_reason = custom_reason
+    match.save()
+    
+    return JsonResponse({'status': 'success'})

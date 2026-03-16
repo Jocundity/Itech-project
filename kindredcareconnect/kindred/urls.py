@@ -27,4 +27,7 @@ urlpatterns = [
     path('notifications/clear-history/', views.clear_notification_history, name='clear_history'),
     path('profile/clear-history/', views.clear_activity_history, name='clear_activity_history'),
     path('api/user-profile/<int:user_id>/', views.get_user_profile_json, name='user_profile_json'),
+    path('withdraw-application/<int:match_id>/', views.withdraw_application, name='withdraw_application'),
+    path('withdraw-by-activity/<int:activity_id>/', views.withdraw_by_activity, name='withdraw_by_activity'),
+    
 ]

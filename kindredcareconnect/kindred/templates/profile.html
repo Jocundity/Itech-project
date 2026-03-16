@@ -204,48 +204,62 @@ Profile - KindredConnect
                 {% endif %}
 
  <!-------------------------------------------- Pending Requests ----------------------------------------------->
-                <div id="pending-activities" class="mb-5">
-                    <h4 class="fw-bold h5 mb-3 text-warning"><i class="bi bi-clock-history me-2"></i>Pending Activities</h4>
-                    {% for match in pending %}
-                        <div class="card border-0 shadow-sm rounded-4 mb-3 p-4 border-start border-warning border-4 interactive-card">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h5 class="fw-bold mb-1">{{ match.activity.activity_name }}</h5>
-                                    <p class="text-muted fs-5 smaller mb-0">
-                                        {% if match.activity.requester == request.user %}
-                                            Volunteer <a href="#" class="view-user-link text-emerald fw-bold text-decoration-none" 
-                                            data-user-id="{{ match.volunteer.id }}">{{ match.volunteer.username }}</a> wants to help.
-                                        {% else %}
-                                            Waiting for <a href="#" class="view-user-link text-emerald fw-bold text-decoration-none" 
-                                            data-user-id="{{ match.volunteer.id }}">{{ match.activity.requester.username }}</a> to confirm.
-                                        {% endif %}
-                                    </p>
-                                </div>
-                                {% if match.activity.requester == request.user %}
-                                    <div class="d-flex gap-3 align-items-center">
-                                            <button type="submit" class="btn btn-link text-danger fs-5 text-decoration-none" data-bs-toggle="modal" data-bs-target="#cancelModal" data-match-id="{{ match.id }}">Decline</button>
-                                        <button type="button" 
-                                            class="btn btn-sm btn-emerald rounded-pill px-5 py-2 shadow-sm approve-trigger-btn" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#confirmApproveModal" 
-                                            data-match-id="{{ match.id }}" 
-                                            data-volunteer-name="{{ match.volunteer.username }}">
-                                            Approve
-                                        </button>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% empty %}
-                        <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white mb-4 interactive-card">
-                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-2" style="width: 60px; height: 60px;">
-                                <span class="fs-2">⏳</span>
-                            </div>
-                            <h6 class="fw-bold text-muted mb-1">No pending requests</h6>
-                            <p class="text-muted smaller mb-0">New volunteer offers will appear here.</p>
-                        </div>
-                    {% endfor %}
+<div id="pending-activities" class="mb-5">
+    <h4 class="fw-bold h5 mb-3 text-warning"><i class="bi bi-clock-history me-2"></i>Pending Activities</h4>
+    {% for match in pending %}
+        <div class="card border-0 shadow-sm rounded-4 mb-3 p-4 border-start border-warning border-4 interactive-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="fw-bold mb-1">{{ match.activity.activity_name }}</h5>
+                    <p class="text-muted fs-5 smaller mb-0">
+                        {% if match.activity.requester == request.user %}
+                            Volunteer <a href="#" class="view-user-link text-emerald fw-bold text-decoration-none" 
+                            data-user-id="{{ match.volunteer.id }}">{{ match.volunteer.username }}</a> wants to help.
+                        {% else %}
+                            Waiting for <a href="#" class="view-user-link text-emerald fw-bold text-decoration-none" 
+                            data-user-id="{{ match.activity.requester.id }}">{{ match.activity.requester.username }}</a> to confirm.
+                        {% endif %}
+                    </p>
                 </div>
+                
+                {% if match.activity.requester == request.user %}
+                    <div class="d-flex gap-3 align-items-center">
+                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-4 py-2" data-bs-toggle="modal" data-bs-target="#cancelModal" data-match-id="{{ match.id }}">Decline</button>
+                        <button type="button" 
+                            class="btn btn-sm btn-emerald rounded-pill px-4 py-2 shadow-sm approve-trigger-btn" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#confirmApproveModal" 
+                            data-match-id="{{ match.id }}" 
+                            data-volunteer-name="{{ match.volunteer.username }}">
+                            Approve
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="d-flex gap-2 align-items-center">
+                        <button class="btn btn-outline-emerald btn-sm rounded-pill px-4 py-2 view-details-btn" 
+                                data-id="{{ match.activity.id }}">
+                            View Details
+                        </button>
+                        <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-4 py-2 withdraw-app-btn" 
+                                data-match-id="{{ match.id }}"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#withdrawModal">
+                            Withdraw Application
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white mb-4 interactive-card">
+            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-2" style="width: 60px; height: 60px;">
+                <span class="fs-2">⏳</span>
+            </div>
+            <h6 class="fw-bold text-muted mb-1">No pending requests</h6>
+            <p class="text-muted smaller mb-0">New volunteer offers will appear here.</p>
+        </div>
+    {% endfor %}
+</div>
 
 <!--------------------------------- Confirmed Activities ----------------------------------->
             <div id="confirmed-activities" class="mb-5">
@@ -270,7 +284,7 @@ Profile - KindredConnect
                             </div>
                             <div class="d-flex align-items-center gap-2">
                             {% if match.activity.requester == request.user %}
-                                <button class="btn btn-outline-secondary py-2 px-3 rounded-pill fw-bold edit-btn" 
+                                <button class="btn btn-outline-secondary btn-sm px-4 py-2 rounded-pill fw-bold edit-btn" 
                                         data-id="{{ match.activity.id }}" 
                                         data-name="{{ match.activity.activity_name }}"
                                         data-category="{{ match.activity.category }}"
@@ -282,12 +296,12 @@ Profile - KindredConnect
                                     Edit
                                 </button>
                             {% endif %}    
-                                <button type="button" class="btn btn-outline-danger py-2 px-3 rounded-pill fw-bold" 
+                                <button type="button" class="btn btn-outline-danger btn-sm px-4 py-2 rounded-pill fw-bold" 
                                         data-bs-toggle="modal" data-bs-target="#cancelModal" data-match-id="{{ match.id }}">
                                     Cancel
                                 </button>
                                 
-                                <button type="button" class="btn btn-emerald py-2 px-3 rounded-pill fw-bold shadow-sm" 
+                                <button type="button" class="btn btn-emerald btn-sm rounded-pill px-4 py-2S fw-bold shadow-sm" 
                                         data-bs-toggle="modal" data-bs-target="#completeModal" data-match-id="{{ match.id }}"
                                         >
                                     Complete

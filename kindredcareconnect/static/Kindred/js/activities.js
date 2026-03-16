@@ -43,6 +43,44 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+// Volunteer withdrawing logic 
+let withdrawMatchId = null;
+let withdrawActivityId = null;
+
+// 1. Capture IDs when modal opens
+document.addEventListener('show.bs.modal', function (event) {
+    if (event.target.id === 'withdrawModal') {
+        const button = event.relatedTarget;
+        withdrawMatchId = button.dataset.matchId;
+        withdrawActivityId = button.dataset.activityId;
+    }
+});
+
+// 2. Handle the confirmation click
+const confirmWithdrawBtn = document.getElementById('confirmWithdrawBtn');
+if (confirmWithdrawBtn) {
+    confirmWithdrawBtn.addEventListener('click', function() {
+        const reason = document.getElementById('withdrawReason').value.trim();
+        const url = withdrawMatchId ? `/kindred/withdraw-application/${withdrawMatchId}/` : `/kindred/withdraw-by-activity/${withdrawActivityId}/`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ reason: reason }) // Send the custom reason
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                location.reload();
+            }
+        });
+    });
+}
+
 // Cancel form logic
 const cancelModal = document.getElementById('cancelModal');
 if (cancelModal) {
@@ -205,7 +243,7 @@ if (finalJoinBtn) {
     });
 }
 
-// Add this specifically for the Profile page Edit buttons
+// Profile page Edit buttons
 document.addEventListener('click', (e) => {
     if (e.target.classList.contains('edit-btn')) {
         const activityId = e.target.dataset.id;
@@ -392,7 +430,16 @@ function renderWithData(dataToRender) {
         let actionButton = '';
         if (userRole === 'volunteer') {
             actionButton = hasApplied ? 
-                `<button class="btn btn-secondary py-2 fw-bold w-100 rounded-pill shadow-sm mb-2" disabled>Application Sent ✓</button>` : 
+               `<div class="d-flex gap-2 mb-2">
+                    <button class="btn btn-secondary py-2 fw-bold flex-grow-1 rounded-pill shadow-sm" style="font-size: 0.85rem;" disabled>Sent ✓</button>
+                    <button class="btn btn-outline-danger py-2 fw-bold flex-grow-1 rounded-pill shadow-sm withdraw-app-btn" 
+                            data-activity-id="${act.id}" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#withdrawModal"
+                            style="font-size: 0.85rem;">
+                        Withdraw
+                    </button>
+                </div>` : 
                 `<button class="btn btn-emerald py-2 fw-bold w-100 rounded-pill shadow-sm mb-2" 
                         data-bs-toggle="modal" data-bs-target="#confirmVolunteerModal" 
                         data-id="${act.id}" data-name="${act.activity_name}">
@@ -405,7 +452,7 @@ function renderWithData(dataToRender) {
             <div class="card border-0 shadow-sm rounded-4 p-4 h-100 interactive-card ${isOwner ? 'border-start border-4 border-emerald' : ''}" data-id="${act.id}">
                 <div class="d-flex justify-content-between">
                     <h4 class="fw-bold mb-1">${act.activity_name}</h4>
-                    ${isOwner ? '<span class="badge bg-emerald-light text-emerald rounded-pill px-3 shadow-sm">Your Listing</span>' : ''}
+                    ${isOwner ? '<span class="badge bg-emerald-light text-emerald rounded-pill px-3 shadow-sm d-inline-flex align-items-center justify-content-center" style="height: 24px; line-height: 1;">Your Listing</span>' : ''}
                 </div>
                     <p class="text-muted small mb-4">
                         By ${isOwner ? '<span class="fw-bold text-emerald">You</span>' : 
@@ -415,7 +462,7 @@ function renderWithData(dataToRender) {
                 <div class="d-grid gap-2 mt-auto">
                     ${isOwner ? `
                         <div class="d-flex gap-2">
-                            <button class="btn btn-light btn-sm flex-grow-1 border shadow-sm rounded-pill edit-btn" 
+                            <button class="btn btn-outline-danger btn-sm flex-grow-1 rounded-pill px-3 py-2 redact-btn" 
                                     data-id="${act.id}" data-bs-toggle="modal" data-bs-target="#editActivityModal">Edit</button>
                             <button class="btn btn-danger btn-sm flex-grow-1 border-0 shadow-sm rounded-pill" 
                                     data-id="${act.id}" 
