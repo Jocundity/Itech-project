@@ -85,6 +85,7 @@ class Activity(models.Model):
     time = models.TimeField()
     gender_preference = models.CharField(max_length=20, blank=True)
     additional_details = models.TextField(max_length=1000, blank=True)
+    status = models.CharField(max_length=20, default='open')
 
     def __str__(self):
         return f"{self.activity_name} ({self.category})"
@@ -95,3 +96,18 @@ class Match(models.Model):
     volunteer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches')
     approval_status = models.CharField(max_length=20, default='pending')
     completion_status = models.CharField(max_length=20, default='incomplete')
+    cancelled_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='cancelled_matches')
+    hidden_by_requester = models.BooleanField(default=False)
+    hidden_by_volunteer = models.BooleanField(default=False)
+    cancellation_reason = models.TextField(max_length=500, blank=True, null=True)
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    # Optional: link to the activity so clicking the notification takes you there
+    activity = models.ForeignKey('Activity', on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']

@@ -249,7 +249,129 @@ body {
 
 /* Custom Style for activities page */
 
+:root {
+    --emerald-primary: #059669;
+    --emerald-hover: #047857;
+}
 
+/* Base Interactivity for ALL cards */
+.interactive-card {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+}
+
+/* 1. Volunteer/Senior Grid Card Hover (Lifts Up) */
+.col-lg-6 .interactive-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(5, 150, 105, 0.15) !important;
+    border-color: #059669 !important;
+}
+
+/* 2. Care Home List Row Hover (Shifts Right) */
+.col-12 .interactive-card:hover {
+    transform: translateX(8px);
+    background-color: #f0fdf4 !important; /* Subtle emerald tint on hover */
+    box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Button Hover State for View Details */
+.view-details-btn {
+    transition: all 0.2s ease;
+}
+
+.view-details-btn:hover {
+    background-color: #059669 !important;
+    color: white !important;
+    letter-spacing: 0.5px;
+}
+
+/* View Details Button Styling */
+.view-details-btn {
+    border-color: var(--emerald-primary);
+    color: var(--emerald-primary);
+    font-weight: 600;
+    transition: all 0.25s ease-in-out;
+}
+
+.view-details-btn:hover {
+    background-color: var(--emerald-primary) !important;
+    color: white !important;
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 4px 8px rgba(5, 150, 105, 0.2) !important;
+}
+
+.view-details-btn:active {
+    transform: translateY(0); /* Pressed effect */
+}
+
+/* Styling for the Senior Request Banner */
+.request-banner {
+    transition: all 0.3s ease-in-out;
+    border: 2px solid transparent;
+}
+
+.request-banner:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(5, 150, 105, 0.15) !important;
+    border-color: #10b981; /* Adds a visible emerald border on hover */
+}
+
+/* Enhancing the Request Button */
+.btn-request-main {
+    background-color: #ffffff;
+    color: #059669;
+    border: 2px solid #059669;
+    transition: all 0.3s ease;
+}
+
+.btn-request-main:hover {
+    background-color: #059669;
+    color: #ffffff;
+    transform: scale(1.05); /* Slightly grows the button */
+    box-shadow: 0 8px 15px rgba(5, 150, 105, 0.2);
+}
+
+/* Standardize card layout to prevent weird spacing */
+#available-activities-list .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensures all cards in a row are the same height */
+}
+
+#available-activities-list .card-body, 
+#available-activities-list .interactive-card {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Forces buttons to the very bottom of the card */
+#available-activities-list .d-grid, 
+#available-activities-list .d-flex.gap-2 {
+    margin-top: auto; 
+    padding-top: 1rem;
+}
+
+/* Senior Request new activity form---------------------------------------------------------------------- */
+/* Make the modal wider for more breathing room */
+.modal-lg-custom {
+    max-width: 600px;
+}
+
+/* Make form controls larger and easier to click */
+.form-senior-lg .form-control, 
+.form-senior-lg .form-select {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    border-radius: 12px !important; /* Matches your safety cards */
+}
+
+.form-senior-lg label {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: #374151;
+}
+/* --------------------------------------------------------------------------------------- */
 .category-filter {
     background-color: #ffffff;
     border: 1px solid #e5e7eb ; /* Default subtle border */
@@ -389,10 +511,54 @@ body {
         object-fit: cover;
     }
     
+ /* Interactive cards for the Profile timeline */
+    .interactive-card {
+        transition: all 0.3s ease;
+        cursor: default;
+    }
 
+    .interactive-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+        border-color: #059669 !important; /* Highlights the border in emerald on hover */
+    }
+
+    /* Redact button hover effect */
+    .btn-outline-danger:hover {
+        background-color: #dc2626;
+        color: white;
+    }
+
+    /* Styling for interactive decline button */
+.btn-link.text-danger {
+    transition: all 0.2s ease;
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+}
+
+.btn-link.text-danger:hover {
+    background-color: #fee2e2; /* Light red background on hover */
+    color: #dc2626 !important; /* Darker red text */
+    text-decoration: none;
+    transform: scale(1.05);
+}
+
+/* custom.css */
+.clear-history-btn {
+    transition: all 0.3s ease;
+    border-color: #dee2e6;
+    color: #6c757d;
+}
+
+.clear-history-btn:hover {
+    background-color: #dc3545 !important; /* Changes to red on hover */
+    border-color: #dc3545 !important;
+    color: white !important;
+    transform: scale(1.05); /* Slight "pop" effect */
+}
     
 
-    /* ---------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------- */
 
  /* Styling for the new Navbar Profile Dropdown */
 #profileDropdown {
@@ -413,3 +579,38 @@ body {
     text-decoration: underline !important;
     color: #047857; /* Slightly darker emerald on hover */
 }
+
+/* ---------------------------------------------------------------------------------- */
+
+/* Style for  Checking profile*/
+.view-user-link {
+    transition: all 0.2s ease-in-out; /* Smooth transition for color and underline */
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.view-user-link:hover {
+    color: #047857 !important; /* A slightly darker emerald on hover */
+    background-color: #ecfdf5; /* Very light emerald background tint */
+    text-decoration: underline !important; /* Traditional link behavior */
+}
+
+
+/* Style for notification scrolling */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Offset the scroll so the header doesn't cover the section title */
+#pending-activities, 
+#confirmed-activities, 
+#open-requests, 
+#activity-history {
+    scroll-margin-top: 120px; 
+}
+
+/* ---------------------------------------------------------------------------------- */
+
+
+

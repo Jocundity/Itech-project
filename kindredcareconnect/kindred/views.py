@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
-from .models import Activity, UserProfile, EmergencyContact
+from .models import Activity, UserProfile, EmergencyContact,Match,Notification
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import authenticate, login as auth_login, update_session_auth_hash
@@ -10,6 +11,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from .forms import EmergencyContactForm
+import json
 
 
 # Create your views here.
@@ -28,12 +30,35 @@ def activities(request):
     return render(request, 'activities.html', context=context_dict)
 
 def activity_list_json(request):
-    # Fetching all activities from the database
-    activities = Activity.objects.all().values(
-        'id', 'activity_name', 'category', 'council_area', 'date', 'time'
-    )
-    # Returning data as JSON for JavaScript to fetch
-    return JsonResponse(list(activities), safe=False)
+    # Updated: Only exclude activities that have a match that is officially APPROVED and INCOMPLETE
+    activities = Activity.objects.filter(status='open').exclude(
+    match__approval_status='approved',
+    match__completion_status='incomplete' 
+    ).distinct()
+    
+    activity_list = []
+
+    for act in activities:
+
+        active_applied_users = list(act.match_set.filter(
+            approval_status='pending',
+            completion_status='incomplete' # This excludes 'cancelled' matches
+        ).values_list('volunteer_id', flat=True))
+        
+        activity_list.append({
+            'id': act.id,
+            'activity_name': act.activity_name,
+            'category': act.category,
+            'council_area': act.council_area,
+            'date': str(act.date),
+            'time': str(act.time),
+            'requester_id': act.requester.id,
+            'requester_username': act.requester.username,
+            'additional_details': act.additional_details, 
+            'applied_volunteer_ids': active_applied_users 
+        })
+        
+    return JsonResponse(activity_list, safe=False)
 
 def signup(request):
     if request.method == "POST":
@@ -114,11 +139,11 @@ def signin(request):
 # Profile view (login required -- by default sends to sign in page)
 @login_required
 def profile(request):
+    
+    from django.db.models import Q 
+
     # Get user profile 
-    try:
-        user_profile = UserProfile.objects.get(user=request.user)
-    except UserProfile.DoesNotExist:
-        user_profile = None
+    user_profile = get_object_or_404(UserProfile, user=request.user)
 
     # Handle submission for emergency contact form
     if request.method == 'POST':
@@ -142,14 +167,52 @@ def profile(request):
     if user_profile and user_profile.usertype == 'senior':
         emergency_contacts = EmergencyContact.objects.filter(user=request.user)
 
-    my_matches = []
-    # Get activity history
-    # Here we demonstrate fetching all activities the user has participated in
+    # 1. Truly Open Requests (Senior/Care Home perspective)
+    # Updated: Keep the activity in "Open Requests" until someone is actually APPROVED
+    my_open_requests = Activity.objects.filter(
+        requester=request.user, 
+        status='open'
+    ).exclude(
+        match__approval_status='approved', 
+        match__completion_status='incomplete' 
+    ).distinct()
+
+    # 2. Base Query for Matches (Pending, Confirmed, History)
+    base_matches = Match.objects.filter(
+        Q(activity__requester=request.user) | Q(volunteer=request.user)
+    ).select_related('activity', 'volunteer', 'activity__requester')
+
+    # 3. Pending Activities: This will now correctly show BOTH Aasim and Aayan
+    pending = base_matches.filter(
+        approval_status='pending',
+        completion_status='incomplete'
+    )
+
+    # 4. Confirmed Activities
+    confirmed = base_matches.filter(
+        approval_status='approved', 
+        completion_status='incomplete'
+    )
+
+    # 5. History logic remains unchanged
+    if user_profile.usertype == 'volunteer':
+        history_filter = Q(hidden_by_volunteer=False)
+    else:
+        history_filter = Q(hidden_by_requester=False)
+
+    history = base_matches.filter(
+        history_filter,
+        completion_status__in=['completed', 'cancelled']
+    ).order_by('-id')[:5]
+    
     context_dict = {
         'profile': user_profile,
         'emergency_contacts': emergency_contacts,
-        'my_matches': my_matches,
-        'form': form
+        'form': form,
+        'my_open_requests': my_open_requests,
+        'pending': pending,
+        'confirmed': confirmed,
+        'history': history
     }
     
     return render(request, 'profile.html', context=context_dict)
@@ -262,3 +325,341 @@ def edit_profile(request):
             "profile": profile,
             "council_area_choices": COUNCIL_AREA_CHOICES
             })
+
+@login_required
+def post_activity(request):
+    if request.method == 'POST':
+        # Get data from the modal form
+        activity_name = request.POST.get('activity_name')
+        category = request.POST.get('category')
+        date = request.POST.get('date')
+        time = request.POST.get('time')
+        council_area = request.POST.get('council_area')
+
+        # Create the activity in the database
+        Activity.objects.create(
+            requester=request.user, # The Senior/Care Home who is logged in
+            activity_name=activity_name,
+            category=category,
+            date=date,
+            time=time,
+            council_area=council_area
+        )
+        
+        # Send them back to the activities page to see their new post
+        return redirect('kindred:activities')
+    
+    return redirect('kindred:activities')
+
+@login_required
+@require_POST
+def approve_match(request, match_id):
+    # 1. Find the match and the original activity
+    match = get_object_or_404(Match, id=match_id, activity__requester=request.user)
+    old_activity = match.activity
+
+    # 1. ARCHIVE THE OLD ACTIVITY
+    # Changing status to something other than 'open' hides it from the feed.
+    old_activity.status = 'closed' 
+    old_activity.save()
+
+    # 2. CREATE A FRESH INSTANCE for the confirmed plan
+    # This generates a brand new ID so the feed resets completely.
+    new_activity = Activity.objects.create(
+        requester=old_activity.requester,
+        activity_name=old_activity.activity_name,
+        category=old_activity.category,
+        date=old_activity.date,
+        time=old_activity.time,
+        council_area=old_activity.council_area,
+        additional_details=old_activity.additional_details,
+        status='open'
+    )
+
+    # 3. TRANSFER and APPROVE the match
+    # Move the winner to the NEW activity so they survive the deletion of the old one.
+    match.activity = new_activity
+    match.approval_status = 'approved'
+    match.save()
+
+    # 4. AUTO-REJECT: Move other volunteers for the OLD activity to history
+    other_pending_matches = Match.objects.filter(
+        activity=old_activity, 
+        approval_status='pending'
+    ).exclude(id=match_id)
+
+    for other in other_pending_matches:
+        other.completion_status = 'cancelled'
+        other.cancellation_reason = "Another volunteer was selected for this session."
+        # Transfer them to the new activity so their history record remains valid
+        other.activity = new_activity
+        other.save()
+        
+        Notification.objects.create(
+            user=other.volunteer,
+            message=f"Update: A volunteer has been selected for '{new_activity.activity_name}'.",
+            activity=new_activity
+        )
+
+    # 5. AUTO-WITHDRAW: Withdraw the approved volunteer from their other pending apps
+    volunteer_other_apps = Match.objects.filter(
+        volunteer=match.volunteer, 
+        approval_status='pending'
+    ).exclude(id=match_id)
+
+    for app in volunteer_other_apps:
+        Notification.objects.create(
+            user=app.activity.requester,
+            message=f"Volunteer {match.volunteer.username} is no longer available for '{app.activity.activity_name}'.",
+            activity=app.activity
+        )
+        app.delete()
+
+    # 6. DELETE THE OLD ACTIVITY
+    # This wipes the 'approved' tie from the original ID, fixing the vanishing bug.
+    # old_activity.delete()
+
+    # 7. Final Notification for the winner
+    Notification.objects.create(
+        user=match.volunteer,
+        message=f"Your request for {new_activity.activity_name} was approved!",
+        activity=new_activity
+    )
+    
+    messages.success(request, f'You have successfully approved {match.volunteer.username}!')
+    return redirect('kindred:profile')
+
+@login_required
+@require_POST
+def redact_activity(request, activity_id):
+    activity = get_object_or_404(Activity, id=activity_id, requester=request.user)
+    
+    try:
+        data = json.loads(request.body)
+        # Use the provided reason, or fall back to a default if empty
+        custom_reason = data.get('reason', "").strip() or f"Withdrawn by {request.user.username}."
+    except (json.JSONDecodeError, TypeError):
+        custom_reason = f"Withdrawn by {request.user.username}."
+
+
+    # Use the logged-in user's username for the message
+    withdrawer_name = request.user.username
+    
+    # 1. Find all pending volunteers who applied for this specific activity
+    pending_matches = Match.objects.filter(activity=activity, approval_status='pending')
+    
+    # 2. Notify them and move the record to their history as 'cancelled'
+    for match in pending_matches:
+        Notification.objects.create(
+            user=match.volunteer,
+            # UPDATE: Dynamic name for the volunteer's notification
+            message=f"The activity '{activity.activity_name}' has been withdrawn by {withdrawer_name}.",
+            activity=activity
+        )
+        
+        match.completion_status = 'cancelled'
+        # UPDATE: Link the cancellation to the user for the "Withdrawn by you" logic
+        match.cancelled_by = request.user
+        match.cancellation_reason = custom_reason
+        match.save()
+
+    # 3. Archive the activity rather than deleting it immediately
+    activity.status = 'closed'
+    activity.save()
+
+    return JsonResponse({
+        'status': 'success', 
+        'message': f'Activity withdrawn by {withdrawer_name} and volunteers notified.'
+    })
+
+@login_required
+@require_POST
+def join_activity(request, activity_id):
+    activity = get_object_or_404(Activity, id=activity_id)
+    
+    # Check if there is an existing ACTIVE match
+    # We must exclude BOTH 'cancelled' and 'completed' so volunteers can re-apply
+    existing_match = Match.objects.filter(
+        activity=activity, 
+        volunteer=request.user
+    ).exclude(completion_status__in=['cancelled', 'completed']).exists()
+
+    if not existing_match:
+        # Create a new match if no active one exists
+        Match.objects.create(
+            activity=activity,
+            volunteer=request.user,
+            approval_status='pending',
+            completion_status='incomplete' # Ensure it starts as incomplete
+        )
+
+        Notification.objects.create(
+            user=activity.requester,
+            message=f"Volunteer {request.user.username} applied for {activity.activity_name}!",
+            activity=activity
+        )   
+    
+    return JsonResponse({'status': 'success'})
+
+@login_required
+@require_POST
+def remove_match(request, match_id):
+    match = get_object_or_404(Match, id=match_id)
+    old_activity = match.activity
+    reason = request.POST.get('reason', 'No reason provided.')
+    
+    if request.user == old_activity.requester or request.user == match.volunteer:
+        recipient = match.volunteer if request.user == old_activity.requester else old_activity.requester
+        
+        # 1. ARCHIVE THE OLD ACTIVITY
+        # Instead of deleting, we change status so it stays in history but leaves the feed.
+        old_activity.status = 'closed'
+        old_activity.save()
+
+        # 2. CREATE A BRAND NEW FRESH INSTANCE
+        # This resets the browse feed for new volunteers with a new ID.
+        Activity.objects.create(
+            requester=old_activity.requester,
+            activity_name=old_activity.activity_name,
+            category=old_activity.category,
+            date=old_activity.date,
+            time=old_activity.time,
+            council_area=old_activity.council_area,
+            additional_details=old_activity.additional_details,
+            status='open'
+        )
+
+        # 3. Update Match details
+        # We keep it tied to the 'closed' old_activity so history is accurate.
+        match.completion_status = 'cancelled'
+        match.cancelled_by = request.user
+        match.cancellation_reason = reason
+        match.save()
+        
+        # 4. Create the notification
+        Notification.objects.create(
+            user=recipient,
+            message=f"The plan for '{old_activity.activity_name}' has been cancelled by {request.user.username}."
+        )
+        
+        messages.info(request, "Plan cancelled. A fresh request has been re-posted.")
+    
+    return redirect('kindred:profile')
+
+@login_required
+@require_POST
+def complete_activity(request, match_id):
+    from django.db.models import Q
+    # 1. Find the match ensuring the user is either the requester or volunteer
+    match = get_object_or_404(
+        Match, 
+        Q(id=match_id) & (Q(activity__requester=request.user) | Q(volunteer=request.user))
+    )
+
+    feedback = request.POST.get('feedback', '')
+    old_activity = match.activity
+    
+    # 2. ARCHIVE THE OLD ACTIVITY
+    # This keeps the history record alive but hides it from Browse Activities.
+    old_activity.status = 'closed'
+    old_activity.save()
+
+    # 3. CREATE A BRAND NEW FRESH INSTANCE for the feed
+    Activity.objects.create(
+        requester=old_activity.requester,
+        activity_name=old_activity.activity_name,
+        category=old_activity.category,
+        date=old_activity.date,
+        time=old_activity.time,
+        council_area=old_activity.council_area,
+        additional_details=old_activity.additional_details,
+        status='open'
+    )
+
+    # 4. Update the match details
+    # We keep it tied to old_activity so history accurately shows original dates/names.
+    match.completion_status = 'completed'
+    match.cancellation_reason = feedback 
+    match.save()
+
+    # Note: old_activity.delete() is removed to keep history growing.
+    
+    messages.success(request, "Session completed! A fresh request has been posted.")
+    return redirect('kindred:profile')
+
+@login_required
+def edit_activity(request, activity_id):
+    # Ensure only the requester who posted it can edit it
+    activity = get_object_or_404(Activity, id=activity_id, requester=request.user)
+    
+    if request.method == 'POST':
+        # Update fields from the form
+        activity.activity_name = request.POST.get('activity_name')
+        activity.category = request.POST.get('category')
+        activity.council_area = request.POST.get('council_area')
+        activity.date = request.POST.get('date')
+        activity.time = request.POST.get('time')
+        activity.save()
+        
+        # Security logic: Reset all matches to pending because time/location changed
+        Match.objects.filter(activity=activity).update(approval_status='pending')
+
+        # 2. TRIGGER NOTIFICATIONS
+        # Notify every volunteer who was matched with this activity
+        volunteers = User.objects.filter(matches__activity=activity)
+        for volunteer in volunteers:
+            Notification.objects.create(
+                user=volunteer,
+                message=f"The activity '{activity.activity_name}' has been updated. Please check the new details.",
+                activity=activity
+            )
+        
+        messages.success(request, "Activity updated! Any existing volunteers must be re-approved.")
+        return redirect('kindred:activities')
+    
+@login_required
+@require_POST
+def clear_notification_history(request):
+    # Deletes all notification records for the current user
+    request.user.notifications.all().delete()
+    return JsonResponse({'status': 'success'})
+
+@login_required
+@require_POST
+def clear_activity_history(request):
+    # Instead of deleting, just hide it for the person who clicked 'Clear'
+    Match.objects.filter(activity__requester=request.user).update(hidden_by_requester=True)
+    Match.objects.filter(volunteer=request.user).update(hidden_by_volunteer=True)
+    
+    messages.success(request, "Activity history cleared.")
+    return redirect('kindred:profile')
+
+from django.db.models import Q
+
+@login_required
+def get_user_profile_json(request, user_id):
+    target_user = get_object_or_404(User, id=user_id)
+    target_profile = target_user.userprofile
+    
+    # Privacy Check: Are these users "Matched" in an approved or completed state?
+    is_matched = Match.objects.filter(
+        (Q(activity__requester=request.user) & Q(volunteer=target_user)) |
+        (Q(activity__requester=target_user) & Q(volunteer=request.user))
+    ).filter(completion_status__in=['incomplete', 'completed']).exists()
+
+    data = {
+        'full_name': f"{target_profile.first_name} {target_profile.last_name}",
+        'usertype': target_profile.usertype,
+        'council_area': target_profile.council_area,
+        'profile_picture_url': target_profile.profile_picture.url if target_profile.profile_picture else None,
+        'joined': "Jan 2025", # Or use target_user.date_joined
+        'bio': "I love helping out in my community!", # Add bio field to model later if desired
+    }
+
+    # Only share sensitive details if they are matched or if it's a Care Home
+    if is_matched or target_profile.usertype == 'care_home':
+        data['email'] = target_user.email
+        if target_profile.usertype == 'care_home':
+            data['address'] = target_profile.address
+            
+    return JsonResponse(data)
