@@ -237,8 +237,20 @@ if (finalJoinBtn) {
                 'X-CSRFToken': getCookie('csrftoken'), 
                 'Content-Type': 'application/json' 
             }
-        }).then(res => { 
-            if (res.ok) location.reload(); 
+        })
+        .then(res => res.json())
+        .then(data => { 
+            if (data.status === 'success') {
+                location.reload(); 
+            } else if (data.status === 'error') {
+                // Hide the confirmation modal first
+                const confirmModal = bootstrap.Modal.getInstance(document.getElementById('confirmVolunteerModal'));
+                confirmModal.hide();
+
+                // Show the "Busy" modal
+                const busyModal = new bootstrap.Modal(document.getElementById('busyModal'));
+                busyModal.show();
+            }
         });
     });
 }
@@ -462,9 +474,9 @@ function renderWithData(dataToRender) {
                 <div class="d-grid gap-2 mt-auto">
                     ${isOwner ? `
                         <div class="d-flex gap-2">
-                            <button class="btn btn-outline-danger btn-sm flex-grow-1 rounded-pill px-3 py-2 redact-btn" 
+                            <button class="btn btn-outline-secondary btn-sm flex-grow-1 rounded-pill px-3 py-2 edit-btn" 
                                     data-id="${act.id}" data-bs-toggle="modal" data-bs-target="#editActivityModal">Edit</button>
-                            <button class="btn btn-danger btn-sm flex-grow-1 border-0 shadow-sm rounded-pill" 
+                            <button class="btn btn-outline-danger btn-sm flex-grow-1 px-3 py-2 redact-btn rounded-pill" 
                                     data-id="${act.id}" 
                                     data-bs-toggle="modal" 
                                     data-bs-target="#redactModal">

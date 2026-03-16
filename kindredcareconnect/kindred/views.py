@@ -194,16 +194,29 @@ def profile(request):
         completion_status='incomplete'
     )
 
-    # 5. History logic remains unchanged
-    if user_profile.usertype == 'volunteer':
-        history_filter = Q(hidden_by_volunteer=False)
-    else:
-        history_filter = Q(hidden_by_requester=False)
+    # Inside the profile function in views.py
 
-    history = base_matches.filter(
+    if user_profile.usertype == 'volunteer':
+        # Volunteers see everything they applied for that is now finished
+        history_filter = Q(volunteer=request.user) & Q(hidden_by_volunteer=False)
+    else:
+        # Seniors/Care Homes ONLY see activities where they actually approved a volunteer
+        # This filters out the "auto-rejected" volunteer applications from their history
+        history_filter = Q(activity__requester=request.user) & Q(hidden_by_requester=False) & Q(approval_status='approved')
+
+    # Apply the filter to fetch the history
+    history = Match.objects.filter(
         history_filter,
         completion_status__in=['completed', 'cancelled']
-    ).order_by('-id')[:5]
+    ).select_related('activity', 'volunteer', 'activity__requester').order_by('-id')[:5]
+
+    is_busy = False
+    if user_profile.usertype == 'volunteer':
+        is_busy = Match.objects.filter(
+            volunteer=request.user, 
+            approval_status='approved', 
+            completion_status='incomplete'
+        ).exists()
     
     context_dict = {
         'profile': user_profile,
@@ -212,7 +225,8 @@ def profile(request):
         'my_open_requests': my_open_requests,
         'pending': pending,
         'confirmed': confirmed,
-        'history': history
+        'history': history,
+        'is_busy': is_busy,
     }
     
     return render(request, 'profile.html', context=context_dict)
@@ -356,6 +370,13 @@ def post_activity(request):
 def approve_match(request, match_id):
     # 1. Find the match and the original activity
     match = get_object_or_404(Match, id=match_id, activity__requester=request.user)
+
+    # NEW: Check if the volunteer being approved is already busy elsewhere
+    if Match.objects.filter(volunteer=match.volunteer, approval_status='approved', completion_status='incomplete').exists():
+        messages.error(request, f"{match.volunteer.username} is already confirmed for another activity and is no longer available.")
+        # Optionally, you could auto-decline this match here
+        return redirect('kindred:profile')
+    
     old_activity = match.activity
 
     # 1. ARCHIVE THE OLD ACTIVITY
@@ -476,6 +497,19 @@ def redact_activity(request, activity_id):
 @require_POST
 def join_activity(request, activity_id):
     activity = get_object_or_404(Activity, id=activity_id)
+
+    # NEW: Check if this volunteer already has a confirmed, unfinished activity
+    has_active_confirmed_match = Match.objects.filter(
+        volunteer=request.user, 
+        approval_status='approved', 
+        completion_status='incomplete'
+    ).exists()
+
+    if has_active_confirmed_match:
+        return JsonResponse({
+            'status': 'error', 
+            'message': 'You already have a confirmed activity. Please complete it before applying for another.'
+        })
     
     # Check if there is an existing ACTIVE match
     # We must exclude BOTH 'cancelled' and 'completed' so volunteers can re-apply
@@ -550,41 +584,36 @@ def remove_match(request, match_id):
 @require_POST
 def complete_activity(request, match_id):
     from django.db.models import Q
-    # 1. Find the match ensuring the user is either the requester or volunteer
+    # 1. Find the match for either user
     match = get_object_or_404(
         Match, 
         Q(id=match_id) & (Q(activity__requester=request.user) | Q(volunteer=request.user))
     )
 
     feedback = request.POST.get('feedback', '')
-    old_activity = match.activity
+    activity = match.activity 
     
-    # 2. ARCHIVE THE OLD ACTIVITY
-    # This keeps the history record alive but hides it from Browse Activities.
-    old_activity.status = 'closed'
-    old_activity.save()
+    # 2. ARCHIVE THE ACTIVITY
+    # Status 'closed' keeps the record but hides it from the browse feed
+    activity.status = 'closed'
+    activity.save()
 
-    # 3. CREATE A BRAND NEW FRESH INSTANCE for the feed
-    Activity.objects.create(
-        requester=old_activity.requester,
-        activity_name=old_activity.activity_name,
-        category=old_activity.category,
-        date=old_activity.date,
-        time=old_activity.time,
-        council_area=old_activity.council_area,
-        additional_details=old_activity.additional_details,
-        status='open'
-    )
+    # --- STEP 3 (REMOVED): Activity.objects.create logic deleted to stop duplicates ---
 
-    # 4. Update the match details
-    # We keep it tied to old_activity so history accurately shows original dates/names.
+    # 4. Update the match details for history
     match.completion_status = 'completed'
     match.cancellation_reason = feedback 
     match.save()
 
-    # Note: old_activity.delete() is removed to keep history growing.
+    # 5. Notify the other party
+    recipient = match.volunteer if request.user == activity.requester else activity.requester
+    Notification.objects.create(
+        user=recipient,
+        message=f"'{activity.activity_name}' has been marked as completed by {request.user.username}.",
+        activity=activity
+    )
     
-    messages.success(request, "Session completed! A fresh request has been posted.")
+    messages.success(request, "Session completed!")
     return redirect('kindred:profile')
 
 @login_required

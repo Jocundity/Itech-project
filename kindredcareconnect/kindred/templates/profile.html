@@ -38,6 +38,18 @@ Profile - KindredConnect
                             class="badge bg-emerald-light text-emerald rounded-pill px-3 py-2 border border-emerald-subtle">
                             {{ profile.get_usertype_display }}
                         </span>
+
+                        {% if profile.usertype == 'volunteer' %}
+                            {% if is_busy %}
+                                <span class="badge bg-warning-subtle text-warning rounded-pill px-3 py-2 border border-warning-subtle">
+                                    ● Currently Helping Someone
+                                </span>
+                            {% else %}
+                                <span class="badge bg-info-subtle text-info rounded-pill px-3 py-2 border border-info-subtle">
+                                    ● Available to Help
+                                </span>
+                            {% endif %}
+                        {% endif %}
                     </div>
 
                     <div class="row g-3 mt-1 justify-content-center justify-content-lg-start">
@@ -346,7 +358,9 @@ Profile - KindredConnect
                                     <p class="mb-0 fs-5">
                                         {% if match.completion_status == 'cancelled' %}
                                             <span class="badge bg-danger-subtle text-danger rounded-pill">
-                                                {% if match.cancelled_by == request.user %}
+                                                {% if "Another volunteer was selected" in match.cancellation_reason %}
+                                                    Not Selected
+                                                {% elif match.cancelled_by == request.user %}
                                                     Withdrawn by you
                                                 {% else %}
                                                     Withdrawn by {{ match.cancelled_by.username }}
