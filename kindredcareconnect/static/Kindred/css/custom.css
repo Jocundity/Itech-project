@@ -374,6 +374,17 @@ body {
     .mobile-search-center {
         text-align: left;
     }
+
+    #category-dropdown {
+        width: 180px !important; /* Prevents dropdown from taking up 50% of the bar */
+        max-width: 200px;
+        border-top: none !important;
+        font-size: 1rem !important; /* Consistent size for desktop */
+    }
+
+    #activity-search {
+        font-size: 1rem !important;
+    }
 }
 
 /* Senior Request new activity form---------------------------------------------------------------------- */
@@ -477,26 +488,39 @@ body {
     height: 0px; 
 }
 
+/* 2. Mobile Specific Overrides (Max-width 767px) */
 @media (max-width: 767px) {
-    .border-md-start {
-        border-left: none !important;
-    }
-    /* Centers everything on mobile for a cleaner look */
-    .safety-card {
-        text-align: center;
+    /* Fix for the 'boxy' look when stacked */
+    .input-group.rounded-pill {
+        border-radius: 2rem !important;
+        padding: 8px 0;
     }
 
-    .rounded-pill-md {
-        border-radius: 1.5rem !important;
+    .mobile-search-center {
+        text-align: center; /* Centers the placeholder text */
     }
-    /* Removes the sharp vertical split line on mobile */
-    .input-group.flex-column > .border-bottom {
-        border-bottom: 1px solid #eee !important;
-    }
-    
+
     /* Centers the dropdown text specifically for mobile */
     #category-dropdown {
         text-align-last: center;
+        border-top: 1px solid #f3f4f6 !important;
+        font-size: 1rem !important; /* Smaller text to match search input */
+        width: 100% !important;
+    }
+
+    #activity-search {
+        font-size: 1rem !important;
+        text-align: center;
+    }
+
+    /* Utility to hide the divider line */
+    .border-md-start {
+        border-left: none !important;
+    }
+
+    /* Centers everything on mobile safety cards */
+    .safety-card {
+        text-align: center;
     }
 }
 
