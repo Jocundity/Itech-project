@@ -248,8 +248,14 @@ Profile - KindredConnect
                     </div>
                 {% else %}
                     <div class="d-flex gap-2 align-items-center">
-                        <button class="btn btn-outline-emerald btn-sm rounded-pill px-4 py-2 view-details-btn" 
-                                data-id="{{ match.activity.id }}">
+                        <button type="button" class="btn btn-outline-emerald btn-sm rounded-pill px-4 py-2 view-details-btn" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#activityDetailsModal"
+                                data-name="{{ match.activity.activity_name }}"
+                                data-category="{{ match.activity.category|title }}"
+                                data-area="{{ match.activity.get_council_area_display }}"
+                                data-date="{{ match.activity.date }} at {{ match.activity.time }}"
+                                data-desc="{{ match.activity.description }}">
                             View Details
                         </button>
                         <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-4 py-2 withdraw-app-btn" 
