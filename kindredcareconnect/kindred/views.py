@@ -48,8 +48,8 @@ def activity_list_json(request):
         activity_list.append({
             'id': act.id,
             'activity_name': act.activity_name,
-            'category': act.category,
-            'council_area': act.council_area,
+            'category': act.get_category_display(), 
+            'council_area': act.get_council_area_display(),
             'date': str(act.date),
             'time': str(act.time),
             'requester_id': act.requester.id,

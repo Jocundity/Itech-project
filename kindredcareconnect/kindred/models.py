@@ -77,10 +77,18 @@ class EmergencyContact(models.Model):
 
 # --- 3. Activity ---
 class Activity(models.Model):
+
+    CATEGORY_CHOICES = (
+        ('outdoor', 'Outdoor'),
+        ('home', 'Home & Hobbies'),
+        ('companionship', 'Companionship'),
+        ('errand', 'Errand & Outdoor'),
+    )
+
     requester = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activities_requested')
-    category = models.CharField(max_length=255)
+    category = models.CharField(max_length=255, choices=CATEGORY_CHOICES)
     activity_name = models.CharField(max_length=255)
-    council_area = models.CharField(max_length=255)
+    council_area = models.CharField(max_length=255, choices=UserProfile.COUNCIL_AREA_CHOICES)
     date = models.DateField()
     time = models.TimeField()
     gender_preference = models.CharField(max_length=20, blank=True)

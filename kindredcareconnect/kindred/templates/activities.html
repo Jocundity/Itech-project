@@ -14,10 +14,12 @@
             
             <div class="row justify-content-center">
                 <div class="col-lg-8">
-                    <div class="input-group input-group-lg rounded-pill bg-white shadow-sm border overflow-hidden">
-                        <span class="input-group-text bg-transparent border-0 ps-4">🔍</span>
-                        <input type="text" id="activity-search" class="form-control border-0 shadow-none py-3" placeholder="Search activities or skills...">
-                        <select id="category-dropdown" class="form-select border-0 border-start shadow-none text-center custom-select" style="max-width: 250px;">
+                    <div class="input-group input-group-lg rounded-pill bg-white shadow-sm border overflow-hidden d-flex flex-column flex-md-row">
+                        <div class="d-flex flex-grow-1 border-bottom border-md-bottom-0">
+                            <span class="input-group-text bg-transparent border-0 ps-4 d-none d-md-flex">🔍</span>
+                            <input type="text" id="activity-search" class="form-control border-0 shadow-none py-3 mobile-search-center" placeholder="Search activities or skills...">
+                        </div>
+                        <select id="category-dropdown" class="form-select border-0 border-md-start shadow-none text-center custom-select py-3" style="max-width: 100%; width: 100%; border-radius: 0;">
                             <option value="all" selected>All Categories</option>
                             <option value="outdoor">Outdoor</option>
                             <option value="home">Home & Hobbies</option>
@@ -43,8 +45,8 @@
 {% if user.userprofile.usertype == 'senior' or user.userprofile.usertype == 'care_home' %}
 <section class="py-5 bg-white">
     <div class="container px-md-5 text-center">
-        <div class="p-5 bg-emerald-light rounded-4 shadow-sm request-banner">
-            <h2 class="fw-bold mb-3">Need a hand with something?</h2>
+        <div class="p-4 p-md-5 bg-emerald-light rounded-4 shadow-sm request-banner">
+            <h2 class="fw-bold mb-3 fs-3 fs-md-2">Need a hand with something?</h2>
             <p class="text-muted mb-4 fs-5">Post a request to find a verified volunteer in your area.</p>
             <button class="btn btn-emerald py-3 px-5 rounded-pill fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#postActivityModal">
                 ✨ POST A NEW ACTIVITY

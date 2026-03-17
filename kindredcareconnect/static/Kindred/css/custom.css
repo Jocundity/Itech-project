@@ -76,12 +76,26 @@ body {
 
 /* Hero Background Styling */
 
+/* custom.css */
 .hero-section {
-    height: 80vh; /* Takes up 80% of the screen height */
+    /* Change fixed height to min-height to allow expansion */
+    min-height: 80vh; 
+    height: auto; 
+    /* Add padding to the bottom so badges never hit the edge */
+    padding-bottom: 3rem; 
+    padding-top: 2rem;
     background: linear-gradient(to right, rgba(252, 250, 248, 0.9) 30%, rgba(252, 250, 248, 0.2)),
                 url("../../images/hero-bg.jpg");
     background-size: cover;
     background-position: center;
+    background-attachment: scroll;
+}
+
+/* Optional: Extra breathing room for the very smallest screens */
+@media (max-width: 576px) {
+    .hero-section {
+        padding-bottom: 4rem;
+    }
 }
 /* ------------------------------------------------------------------------------------------------- */
 .text-emerald { color: #065f46; }
@@ -352,6 +366,16 @@ body {
     padding-top: 1rem;
 }
 
+.mobile-search-center {
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .mobile-search-center {
+        text-align: left;
+    }
+}
+
 /* Senior Request new activity form---------------------------------------------------------------------- */
 /* Make the modal wider for more breathing room */
 .modal-lg-custom {
@@ -436,8 +460,20 @@ body {
     color: #ffffff ;
 }
 
-/* 4. Scrollbar: Hidden but functional for categories */
+/* 4. Scrollbar */
+.custom-scrollbar {
+    display: flex;
+    overflow-x: auto; /* Enables horizontal scrolling */
+    white-space: nowrap; /* Prevents categories from wrapping to new lines */
+    -webkit-overflow-scrolling: touch; /* Ensures smooth momentum scrolling on iOS */
+    gap: 1rem;
+    padding-bottom: 15px; /* Adds space so shadows aren't cut off */
+    scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
+
+/* Keeps scrollbar hidden in Chrome, Safari, and Edge */
 .custom-scrollbar::-webkit-scrollbar {
+    display: none;
     height: 0px; 
 }
 
@@ -448,6 +484,19 @@ body {
     /* Centers everything on mobile for a cleaner look */
     .safety-card {
         text-align: center;
+    }
+
+    .rounded-pill-md {
+        border-radius: 1.5rem !important;
+    }
+    /* Removes the sharp vertical split line on mobile */
+    .input-group.flex-column > .border-bottom {
+        border-bottom: 1px solid #eee !important;
+    }
+    
+    /* Centers the dropdown text specifically for mobile */
+    #category-dropdown {
+        text-align-last: center;
     }
 }
 

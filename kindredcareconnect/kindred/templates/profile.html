@@ -165,7 +165,7 @@ Profile - KindredConnect
             <div id="activity-history-list">
                 {% if profile.usertype == 'senior' or profile.usertype == 'care_home' %}
                 <div id="open-requests" class="mb-5">
-                    <h4 class="fw-bold h4 mb-4 text-emerald"><i class="bi bi-megaphone me-2"></i>My Open Requests</h4>
+                    <h4 class="fw-bold h4 mb-4 text-emerald text-center text-lg-start"><i class="bi bi-megaphone me-2"></i>My Open Requests</h4>
                     {% for activity in my_open_requests %}
                         <div class="card border-0 shadow-sm rounded-4 mb-3 p-4 bg-white border-start border-emerald border-4 interactive-card">
                             <div class="d-flex justify-content-between align-items-center">
@@ -217,7 +217,7 @@ Profile - KindredConnect
 
  <!-------------------------------------------- Pending Requests ----------------------------------------------->
 <div id="pending-activities" class="mb-5">
-    <h4 class="fw-bold h5 mb-3 text-warning"><i class="bi bi-clock-history me-2"></i>Pending Activities</h4>
+    <h4 class="fw-bold h5 mb-3 text-warning text-center text-lg-start"><i class="bi bi-clock-history me-2"></i>Pending Activities</h4>
     {% for match in pending %}
         <div class="card border-0 shadow-sm rounded-4 mb-3 p-4 border-start border-warning border-4 interactive-card">
             <div class="d-flex justify-content-between align-items-center">
@@ -275,7 +275,7 @@ Profile - KindredConnect
 
 <!--------------------------------- Confirmed Activities ----------------------------------->
             <div id="confirmed-activities" class="mb-5">
-                <h4 class="fw-bold h5 mb-3 text-emerald"><i class="bi bi-calendar-check me-2"></i>Confirmed Activities</h4>
+                <h4 class="fw-bold h5 mb-3 text-emerald text-center text-lg-start"><i class="bi bi-calendar-check me-2"></i>Confirmed Activities</h4>
                 {% for match in confirmed %}
                     <div class="card border-0 shadow-sm rounded-4 mb-3 p-4 border-start border-emerald border-4 interactive-card">
                         <div class="d-flex justify-content-between align-items-center">
@@ -337,8 +337,8 @@ Profile - KindredConnect
 
 <!-- -------------------------------------------Activity History ----------------------------------------------->
                 <div id="activity-history" class="mt-5">
-                   <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4 class="fw-bold h4 mb-0 text-muted">Activity History</h4>
+                   <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+                        <h4 class="fw-bold h4 mb-0 text-muted text-center text-lg-start">Activity History</h4>
                         {% if history %}
                                 <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-1 fw-bold shadow-sm"
                                         data-bs-toggle="modal" data-bs-target="#confirmHistoryClear">
