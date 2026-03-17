@@ -222,6 +222,16 @@ if (confirmModal) {
         pendingActivityId = button.getAttribute('data-id');
         const activityName = button.getAttribute('data-name');
         document.getElementById('volunteerModalTaskName').innerText = `Apply to help with: ${activityName}`;
+   
+        const act = allActivities.find(a => a.id == pendingActivityId);
+        const reviewBtn = document.getElementById('reviewDetailsBtn');
+        if (act && reviewBtn) {
+            reviewBtn.setAttribute('data-name', act.activity_name || 'Activity Details');
+            reviewBtn.setAttribute('data-category', act.category || 'General');
+            reviewBtn.setAttribute('data-area', act.council_area || 'TBD');
+            reviewBtn.setAttribute('data-date', (act.date + ' at ' + act.time) || 'Flexible');
+            reviewBtn.setAttribute('data-desc', act.description || 'No additional details provided.');
+        }
     });
 }
 
@@ -414,7 +424,14 @@ function renderWithData(dataToRender) {
                                     Redact
                                 </button>
                             ` : `
-                                <button class="btn btn-outline-emerald btn-sm rounded-pill px-4 view-details-btn" data-id="${act.id}">
+                                <button type="button" class="btn btn-outline-emerald py-2 fw-bold rounded-pill shadow-sm view-details-btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#activityDetailsModal"
+                                        data-name="${act.activity_name}"
+                                        data-category="${act.category}"
+                                        data-area="${act.council_area}"
+                                        data-date="${act.date} at ${act.time}"
+                                        data-desc="${act.description || 'No additional details provided.'}">
                                     View Details
                                 </button>
                             `}
@@ -473,7 +490,16 @@ function renderWithData(dataToRender) {
                         </div>
                     ` : `
                         ${actionButton}
-                        <button class="btn btn-outline-emerald py-2 fw-bold rounded-pill shadow-sm view-details-btn" data-id="${act.id}">View Details</button>
+                       <button type="button" class="btn btn-outline-emerald py-2 fw-bold rounded-pill shadow-sm view-details-btn" 
+                               data-bs-toggle="modal" 
+                               data-bs-target="#activityDetailsModal"
+                               data-name="${act.activity_name}"
+                               data-category="${act.category}"
+                               data-area="${act.council_area}"
+                               data-date="${act.date} at ${act.time}"
+                               data-desc="${act.description || 'No additional details provided.'}">
+                            View Details
+                       </button>
                     `}
                 </div>
             </div>

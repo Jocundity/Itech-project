@@ -265,5 +265,55 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'kindred/js/activities.js' %}"></script>
+
+
+
+    <div class="modal fade" id="activityDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg text-center p-5">
+            <div class="mx-auto rounded-circle d-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px; background-color: #d1fae5;">
+                <span class="fs-1">📋</span>
+            </div>
+            
+            <h4 class="fw-bold mb-1" id="modalActName">Activity Name</h4>
+            <span class="text-emerald fw-bold mb-4 d-inline-block" id="modalActCategory">Category</span>
+            
+            <div class="mb-3 mt-2">
+                <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 1px;">Location</p>
+                <p class="fw-medium text-dark fs-5" id="modalActLocation">Location</p>
+            </div>
+            <hr class="w-25 mx-auto text-muted opacity-25">
+            
+            <div class="mb-3">
+                <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 1px;">Schedule</p>
+                <p class="fw-medium text-dark fs-5" id="modalActDate">Date and Time</p>
+            </div>
+            <hr class="w-25 mx-auto text-muted opacity-25">
+            
+            <div class="mb-4">
+                <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 1px;">Description</p>
+                <p class="text-dark small px-3" id="modalActDesc">Description goes here</p>
+            </div>
+
+            <button type="button" class="btn btn-light bg-gray-100 text-dark rounded-pill w-50 mx-auto py-2 fw-bold shadow-sm mt-2" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const actModal = document.getElementById('activityDetailsModal');
+    if (actModal) {
+        actModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            document.getElementById('modalActName').innerText = button.getAttribute('data-name') || 'Activity';
+            document.getElementById('modalActCategory').innerText = button.getAttribute('data-category') || 'General';
+            document.getElementById('modalActLocation').innerText = button.getAttribute('data-area') || 'TBD';
+            document.getElementById('modalActDate').innerText = button.getAttribute('data-date') || 'Flexible';
+            document.getElementById('modalActDesc').innerText = button.getAttribute('data-desc') || 'No description provided by the organizer.';
+        });
+    }
+});
+</script>
 </body>
 </html>
