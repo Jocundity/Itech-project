@@ -81,7 +81,7 @@ class Activity(models.Model):
         ('outdoor', 'Outdoor'),
         ('home', 'Home & Hobbies'),
         ('companionship', 'Companionship'),
-        ('errand', 'Errand & Outdoor'),
+        ('errand', 'Errand'),
     )
 
     requester = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activities_requested')

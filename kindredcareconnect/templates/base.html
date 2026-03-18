@@ -159,7 +159,7 @@
                 <h6 class="fw-bold mb-3">Quick Links</h6>
                 <ul class="list-unstyled small text-muted">
                     <li class="mb-2"><a href="{% url 'kindred:about' %}" class="text-decoration-none text-reset footer-link">About Us</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-reset footer-link">Browse Activities</a></li>
+                    <li class="mb-2"><a href="{% url 'kindred:activities' %}" class="text-decoration-none text-reset footer-link">Browse Activities</a></li>
                     <li class="mb-2"><a href="{% url 'kindred:signup' %}" class="text-decoration-none text-reset footer-link">Become a Volunteer</a></li>
                 </ul>
             </div>
@@ -329,11 +329,15 @@ document.addEventListener('DOMContentLoaded', function() {
     if (actModal) {
         actModal.addEventListener('show.bs.modal', function (event) {
             const button = event.relatedTarget;
+            const description = button.getAttribute('data-desc');
             document.getElementById('modalActName').innerText = button.getAttribute('data-name') || 'Activity';
             document.getElementById('modalActCategory').innerText = button.getAttribute('data-category') || 'General';
             document.getElementById('modalActLocation').innerText = button.getAttribute('data-area') || 'TBD';
             document.getElementById('modalActDate').innerText = button.getAttribute('data-date') || 'Flexible';
             document.getElementById('modalActDesc').innerText = button.getAttribute('data-desc') || 'No description provided by the organizer.';
+            document.getElementById('modalActDesc').innerText = (description && description !== "None" && description !== "") 
+                ? description 
+                : 'No additional details provided by the User.';
         });
     }
 });
