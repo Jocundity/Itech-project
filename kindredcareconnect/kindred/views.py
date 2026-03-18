@@ -13,6 +13,42 @@ from django.contrib.auth.decorators import login_required
 from .forms import EmergencyContactForm
 import json
 
+# To use to show location later in views
+COUNCIL_AREA_CHOICES = [
+        ("aberdeen_city", "Aberdeen City"),
+        ("aberdeenshire", "Aberdeenshire"),
+        ("angus", "Angus"),
+        ("argyll_and_bute", "Argyll and Bute"),
+        ("clackmannanshire", "Clackmannanshire"),
+        ("dumfries_and_galloway", "Dumfries and Galloway"),
+        ("dundee_city", "Dundee City"),
+        ("east_ayrshire", "East Ayrshire"),
+        ("east_dunbartonshire", "East Dunbartonshire"),
+        ("east_lothian", "East Lothian"),
+        ("east_renfrewshire", "East Renfrewshire"),
+        ("city_of_edinburgh", "City of Edinburgh"),
+        ("falkirk", "Falkirk"),
+        ("fife", "Fife"),
+        ("glasgow_city", "Glasgow City"),
+        ("highland", "Highland"),
+        ("inverclyde", "Inverclyde"),
+        ("midlothian", "Midlothian"),
+        ("moray", "Moray"),
+        ("na_h-eileanan_siar_(western_isles)", "Na h-Eileanan Siar (Western Isles)"),
+        ("north_ayrshire", "North Ayrshire"),
+        ("north_lanarkshire", "North Lanarkshire"),
+        ("orkney", "Orkney"),
+        ("perth_and_kinross", "Perth and Kinross"),
+        ("renfrewshire", "Renfrewshire"),
+        ("scottish_borders", "Scottish Borders"),
+        ("shetland_islands", "Shetland Islands"),
+        ("south_ayrshire", "South Ayrshire"),
+        ("south_lanarkshire", "South Lanarkshire"),
+        ("stirling", "Stirling"),
+        ("west_dunbartonshire", "West Dunbartonshire"),
+        ("west_lothian", "West Lothian"),
+    ]
+
 
 # Create your views here.
 def index(request):
@@ -26,7 +62,14 @@ def about(request):
     return render(request, "about.html", context=context_dict)
 
 def activities(request):
-    context_dict = {}
+    user_location = None
+    if hasattr(request.user, "userprofile"):
+        user_location = request.user.userprofile.council_area
+        
+    context_dict = {
+        "council_areas": COUNCIL_AREA_CHOICES, 
+        "user_location": user_location
+    }
     return render(request, 'activities.html', context=context_dict)
 
 def activity_list_json(request):
@@ -242,41 +285,6 @@ def delete_emergency_contact(request, contact_id):
 def edit_profile(request):
     user = request.user
     profile = user.userprofile
-
-    COUNCIL_AREA_CHOICES = [
-        ("aberdeen_city", "Aberdeen City"),
-        ("aberdeenshire", "Aberdeenshire"),
-        ("angus", "Angus"),
-        ("argyll_and_bute", "Argyll and Bute"),
-        ("clackmannanshire", "Clackmannanshire"),
-        ("dumfries_and_galloway", "Dumfries and Galloway"),
-        ("dundee_city", "Dundee City"),
-        ("east_ayrshire", "East Ayrshire"),
-        ("east_dunbartonshire", "East Dunbartonshire"),
-        ("east_lothian", "East Lothian"),
-        ("east_renfrewshire", "East Renfrewshire"),
-        ("city_of_edinburgh", "City of Edinburgh"),
-        ("falkirk", "Falkirk"),
-        ("fife", "Fife"),
-        ("glasgow_city", "Glasgow City"),
-        ("highland", "Highland"),
-        ("inverclyde", "Inverclyde"),
-        ("midlothian", "Midlothian"),
-        ("moray", "Moray"),
-        ("na_h-eileanan_siar_(western_isles)", "Na h-Eileanan Siar (Western Isles)"),
-        ("north_ayrshire", "North Ayrshire"),
-        ("north_lanarkshire", "North Lanarkshire"),
-        ("orkney", "Orkney"),
-        ("perth_and_kinross", "Perth and Kinross"),
-        ("renfrewshire", "Renfrewshire"),
-        ("scottish_borders", "Scottish Borders"),
-        ("shetland_islands", "Shetland Islands"),
-        ("south_ayrshire", "South Ayrshire"),
-        ("south_lanarkshire", "South Lanarkshire"),
-        ("stirling", "Stirling"),
-        ("west_dunbartonshire", "West Dunbartonshire"),
-        ("west_lothian", "West Lothian"),
-    ]
 
     # Change user profile data based on form inputs
     if request.method == "POST":
