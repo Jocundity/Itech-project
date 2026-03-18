@@ -25,25 +25,25 @@
     <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'kindred:index' %}">
       <span class="me-2 text-success">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#059669" class="me-2">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-    </svg>
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
       </span>
       KindredConnect
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mx-auto">
+        <ul class="navbar-nav mx-auto text-center py-3 py-lg-0">
             <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:index' %}">Home</a></li>
             <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:about' %}">About</a></li>
             <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:activities' %}">Activities</a></li>
             <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:profile' %}">Profile</a></li>
         </ul>
         <!-- Show profile icon if user is signed in else show the buttons -->
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center justify-content-center justify-content-lg-end gap-3 pb-3 pb-lg-0">
             {% if user.is_authenticated %}
 
             <!--------------------------------- Bell icon (For notifications) ------------------------------->
@@ -56,7 +56,7 @@
                         </span>
                     {% endif %}
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2 p-3" style="width: 300px;" aria-labelledby="notificationDropdown">
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2 p-3 notification-mobile-fix" style="width: 300px;" aria-labelledby="notificationDropdown">
                     <div class="d-flex justify-content-between align-items-center mb-3 px-2">
                         <h6 class="fw-bold mb-0">Notifications</h6>
                         <button type="button" class="btn btn-link btn-sm text-danger p-0 text-decoration-none smaller fw-bold"

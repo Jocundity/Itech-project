@@ -385,6 +385,11 @@ body {
     #activity-search {
         font-size: 1rem !important;
     }
+
+    .notification-mobile-fix {
+        width: 300px; /* Standard width for desktop */
+        position: absolute !important;
+    }
 }
 
 /* Senior Request new activity form---------------------------------------------------------------------- */
@@ -522,6 +527,16 @@ body {
     .safety-card {
         text-align: center;
     }
+
+    .notification-mobile-fix {
+        position: fixed !important; /* Locks it to the viewport, not the icon */
+        top: 80px !important; /* Adjust based on your navbar height */
+        left: 5% !important;
+        right: 5% !important;
+        width: 90% !important; /* Takes up 90% of screen width */
+        transform: none !important; /* Stops Bootstrap's auto-positioning */
+        margin: 0 auto;
+    }
 }
 
 /* Sign Up Form styles */
@@ -565,7 +580,26 @@ body {
     .safety-card:hover { transform: translateY(-3px); }
     .smaller { font-size: 0.8rem; }
     .border-lg-end { border-right: 1px solid #dee2e6; }
-    @media (max-width: 991px) { .border-lg-end { border-right: none; border-bottom: 1px solid #dee2e6; padding-bottom: 15px; } }
+    @media (max-width: 991px) { 
+        .border-lg-end { border-right: none; border-bottom: 1px solid #dee2e6; padding-bottom: 15px; }
+        .navbar-nav .nav-link {
+        /* 1. Forces the link to only be as wide as its text */
+        display: inline-block; 
+        width: fit-content;
+        margin: 0 auto; /* Keeps it centered while being narrow */
+        }
+
+        .nav-link::after {
+            /* 2. Resets the underline to start from the left of the text */
+            left: 0 !important;
+            transform: none !important;
+        }
+
+        .nav-link:hover::after {
+            /* 3. Now 100% means 100% of the word, not the screen */
+            width: 100% !important;
+        }
+    }
 
     #emergency-contact-form { display: none; }
     #profile-message {
