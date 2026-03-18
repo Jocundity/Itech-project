@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KindredConnect is a platform to bridge the generational divide and support seniors in their daily lives">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{% static 'kindred/css/custom.css' %}">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 88.9L16.7 55.6C7.2 46.1 7.2 30.9 16.7 21.4s24.7-9.5 34.2 0L50 20.5l-.9.9c9.5-9.5 24.7-9.5 34.2 0s9.5 24.7 0 34.2L50 88.9z' fill='white'/></svg>#v=1">
 
@@ -24,32 +26,74 @@
     <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'kindred:index' %}">
       <span class="me-2 text-success">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#059669" class="me-2">
-        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-    </svg>
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
       </span>
       KindredConnect
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <button class="navbar-toggler border-0 shadow-none" type="button" aria-label="Toggle navigation" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mx-auto">
+        <ul class="navbar-nav mx-auto text-center py-3 py-lg-0">
             <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:index' %}">Home</a></li>
             <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:about' %}">About</a></li>
             <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:activities' %}">Activities</a></li>
             <li class="nav-item"><a class="nav-link px-3" href="{% url 'kindred:profile' %}">Profile</a></li>
         </ul>
-
-        <!-- <div class="d-flex align-items-center gap-3">
-            <a href="{% url 'kindred:signin' %}" class="nav-signin fw-medium">Sign In</a>
-            <a href="{% url 'kindred:signup' %}" class="btn btn-emerald px-4 rounded-pill fw-bold">Get Started</a>
-        </div> -->
-
         <!-- Show profile icon if user is signed in else show the buttons -->
-        <div class="d-flex align-items-center gap-3">
+        <div class="d-flex align-items-center justify-content-center justify-content-lg-end gap-3 pb-3 pb-lg-0">
             {% if user.is_authenticated %}
+
+            <!--------------------------------- Bell icon (For notifications) ------------------------------->
+            <div class="dropdown">
+                <a href="#" class="nav-link position-relative px-2" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bell fs-5"></i>
+                    {% if unread_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                            {{ unread_count }}
+                        </span>
+                    {% endif %}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4 mt-2 p-3 notification-mobile-fix" style="width: 300px;" aria-labelledby="notificationDropdown">
+                    <div class="d-flex justify-content-between align-items-center mb-3 px-2">
+                        <h6 class="fw-bold mb-0">Notifications</h6>
+                        <button type="button" class="btn btn-link btn-sm text-danger p-0 text-decoration-none smaller fw-bold"
+                                data-bs-toggle="modal" data-bs-target="#confirmNotificationClear">
+                            Clear All
+                        </button>
+                    </div>
+                    <div class="notification-scroll" style="max-height: 300px; overflow-y: auto;">
+                        {% for note in recent_notifications %}
+                            <li class="px-2">
+                                {% if "applied" in note.message or "wants to help" in note.message %}
+                                    <a href="{% url 'kindred:profile' %}#pending-activities" class="text-decoration-none text-dark">
+                                {% elif "approved" in note.message %}
+                                    <a href="{% url 'kindred:profile' %}#confirmed-activities" class="text-decoration-none text-dark">
+                                {% elif "withdrawn" in note.message or "cancelled" in note.message %}
+                                    <a href="{% url 'kindred:profile' %}#activity-history" class="text-decoration-none text-dark">
+                                {% else %}
+                                    <a href="{% url 'kindred:profile' %}" class="text-decoration-none text-dark">
+                                {% endif %}
+
+                                    <div class="dropdown-item rounded-3 mb-3 p-3 {% if not note.is_read %}bg-light{% endif %}" style="white-space: normal; border: 1px solid #f0f0f0;">
+                                        <p class="mb-1 small fw-medium">{{ note.message }}</p>
+                                        <small class="text-muted smaller d-block">{{ note.created_at|timesince }} ago</small>
+                                    </div>
+                                </a>
+                            </li>
+                        {% empty %}
+                            <li class="text-center py-4 text-muted">
+                                <div class="mb-2 fs-3">🔔</div>
+                                <p class="small mb-0">No new notifications</p>
+                            </li>
+                        {% endfor %}
+                    </div>
+                </ul>
+             </div>
+            <!----------------------------------------- Profile pic dropdown ----------------------------------------->
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="bg-emerald-light rounded-circle d-flex align-items-center justify-content-center border border-emerald-subtle shadow-sm overflow-hidden" style="width: 40px; height: 40px;">
@@ -96,11 +140,11 @@
 <!-- -------------------------------------------------------------------------------------------------------- -->
 <!-- Footer (on every page) -->
 
-<footer class="bg-white pt-5 pb-3">
+<footer class="bg-white pt-5 pb-3 border-top mt-auto">
     <div class="container px-md-5">
-        <div class="row g-4">
-            <div class="col-md-4">
-                <a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'kindred:index' %}">
+        <div class="row g-4 text-center text-md-start">
+            <div class="col-12 col-md-4">
+                <a class="navbar-brand d-flex align-items-center justify-content-center justify-content-md-start fw-bold mx-0" href="{% url 'kindred:index' %}">
                     <span class="me-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#059669" class="me-2">
                             <path
@@ -109,7 +153,7 @@
                     </span>
                     KindredConnect
                 </a>
-                <p class="text-muted small" style="max-width: 250px;">Bridging the gap in elderly care through compassion, connection, and community.</p>
+                <p class="text-muted small mx-auto mx-md-0" style="max-width: 250px;">Bridging the gap in elderly care through compassion, connection, and community.</p>
             </div>
             <div class="col-6 col-md-4 text-md-center">
                 <h6 class="fw-bold mb-3">Quick Links</h6>
@@ -135,6 +179,164 @@
     </div>
 </footer>
 
+<!--------------------------- Notification clear modal ----------------------->
+ <div class="modal fade" id="confirmNotificationClear" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-body text-center p-4">
+                <div class="fs-1 mb-3">🔔</div>
+                <p class="fw-bold mb-0">Clear all recent notifications?</p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="executeNotificationClear" class="btn btn-danger rounded-pill px-4 fw-bold">Clear All</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------------------------------- User Profile modal -------------------------------------->
+<div class="modal fade" id="userPreviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-body p-5 text-center"> <div class="bg-emerald-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4 overflow-hidden" style="width: 110px; height: 110px;">
+                    <div id="previewDefaultIcon">
+                        <i class="bi bi-person-fill text-emerald" style="font-size: 3rem;"></i>
+                    </div>
+                    <img id="previewProfilePic" src="" class="d-none" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+
+                <h2 id="previewName" class="fw-bold mb-2">...</h2> <span id="previewBadge" class="badge bg-emerald-light text-emerald rounded-pill px-4 py-2 mb-4 fs-6">...</span>
+                
+                <div class="mt-3 text-center"> 
+                    <div class="py-2">
+                        <small class="text-muted d-block text-uppercase smaller fw-bold ls-wide" style="letter-spacing: 0.05em;">Location</small>
+                        <span id="previewLocation" class="fs-5 fw-medium">...</span>
+                    </div>
+                    
+                    <div class="py-2">
+                        <small class="text-muted d-block text-uppercase smaller fw-bold ls-wide" style="letter-spacing: 0.05em;">Member Since</small>
+                        <span id="previewJoined" class="fs-5 fw-medium">...</span>
+                    </div>
+
+                    <div id="contactInfoSection" class="d-none">
+                        <hr class="w-50 mx-auto my-4 opacity-25"> <div class="py-2">
+                            <small class="text-muted d-block text-uppercase smaller fw-bold ls-wide">Contact Email</small>
+                            <span id="previewEmail" class="fs-5 fw-medium text-emerald">...</span>
+                        </div>
+                        
+                        <div id="addressSection" class="d-none py-2">
+                            <small class="text-muted d-block text-uppercase smaller fw-bold ls-wide">Care Home Address</small>
+                            <span id="previewAddress" class="fs-5 fw-medium">...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <button type="button" class="btn btn-light rounded-pill px-5 py-2 fw-bold" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------------------------------- Volunteer Withdrawal Modal -------------------------------------->
+<div class="modal fade" id="withdrawModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-body text-center p-4">
+                <div class="fs-1 mb-3">👋</div>
+                <h5 class="fw-bold">Withdraw Application?</h5>
+                <p class="text-muted">This will remove your application. You can provide an optional note for the requester.</p>
+
+                <div class="text-start mb-3">
+                    <label class="form-label small fw-bold text-muted">Reason (Optional)</label>
+                    <textarea id="withdrawReason" class="form-control rounded-3" rows="2" 
+                              placeholder="e.g., Change of plans..."></textarea>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="button" id="confirmWithdrawBtn" class="btn btn-danger rounded-pill py-2 fw-bold">Confirm & Withdraw</button>
+                    <button type="button" class="btn btn-light rounded-pill py-2" data-bs-dismiss="modal">Go Back</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------------------------------- Busy Modal -------------------------------------->
+<div class="modal fade" id="busyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-body p-4 text-center">
+                <div class="fs-1 mb-3">⏳</div>
+                <h4 class="fw-bold mb-2">One Task at a Time!</h4>
+                <p class="text-muted mb-4">You already have a confirmed activity. Please complete your current commitment before applying for a new one.</p>
+                
+                <div class="d-grid gap-2">
+                    <a href="{% url 'kindred:profile' %}" class="btn btn-emerald py-2 rounded-pill fw-bold shadow-sm">
+                        View My Current Task
+                    </a>
+                    <button type="button" class="btn btn-light py-2 rounded-pill fw-bold border" data-bs-dismiss="modal">
+                        Maybe Later
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'kindred/js/activities.js' %}"></script>
+
+
+<!------------------------------- View Details Modal -------------------------------------->
+    <div class="modal fade" id="activityDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg text-center p-5">
+            <div class="mx-auto rounded-circle d-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px; background-color: #d1fae5;">
+                <span class="fs-1">📋</span>
+            </div>
+            
+            <h4 class="fw-bold mb-1" id="modalActName">Activity Name</h4>
+            <span class="text-emerald fw-bold mb-4 d-inline-block" id="modalActCategory">Category</span>
+            
+            <div class="mb-3 mt-2">
+                <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 1px;">Location</p>
+                <p class="fw-medium text-dark fs-5" id="modalActLocation">Location</p>
+            </div>
+            <hr class="w-25 mx-auto text-muted opacity-25">
+            
+            <div class="mb-3">
+                <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 1px;">Schedule</p>
+                <p class="fw-medium text-dark fs-5" id="modalActDate">Date and Time</p>
+            </div>
+            <hr class="w-25 mx-auto text-muted opacity-25">
+            
+            <div class="mb-4">
+                <p class="text-muted small fw-bold mb-1 text-uppercase" style="letter-spacing: 1px;">Description</p>
+                <p class="text-dark small px-3" id="modalActDesc">Description goes here</p>
+            </div>
+
+            <button type="button" class="btn btn-light bg-gray-100 text-dark rounded-pill w-50 mx-auto py-2 fw-bold shadow-sm mt-2" data-bs-dismiss="modal">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const actModal = document.getElementById('activityDetailsModal');
+    if (actModal) {
+        actModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            document.getElementById('modalActName').innerText = button.getAttribute('data-name') || 'Activity';
+            document.getElementById('modalActCategory').innerText = button.getAttribute('data-category') || 'General';
+            document.getElementById('modalActLocation').innerText = button.getAttribute('data-area') || 'TBD';
+            document.getElementById('modalActDate').innerText = button.getAttribute('data-date') || 'Flexible';
+            document.getElementById('modalActDesc').innerText = button.getAttribute('data-desc') || 'No description provided by the organizer.';
+        });
+    }
+});
+</script>
 </body>
 </html>

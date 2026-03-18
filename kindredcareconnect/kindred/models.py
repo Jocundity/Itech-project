@@ -57,7 +57,6 @@ class UserProfile (models.Model):
     last_name = models.CharField(max_length=255, blank=True)
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=True, null=True)
     council_area = models.CharField(max_length=255, choices=COUNCIL_AREA_CHOICES,blank=True)
-    # living_situation = models.CharField(max_length=20, blank=True)
     care_home_name = models.CharField(max_length=255, blank=True)
     address = models.CharField(max_length=500, blank=True)
     profile_picture = models.ImageField(upload_to="profile_pics", null=True, blank=True)
@@ -69,7 +68,7 @@ class UserProfile (models.Model):
 class EmergencyContact(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='emergency_contacts')
     name = models.CharField(max_length=255)
-    mobile = models.CharField(max_length=15)
+    mobile = models.CharField(max_length=11)
     relationship = models.CharField(max_length=20)
 
     def __str__(self):
@@ -77,14 +76,22 @@ class EmergencyContact(models.Model):
 
 # --- 3. Activity ---
 class Activity(models.Model):
+
+    CATEGORY_CHOICES = (
+        ('outdoor', 'Outdoor'),
+        ('home', 'Home & Hobbies'),
+        ('companionship', 'Companionship'),
+        ('errand', 'Errand & Outdoor'),
+    )
+
     requester = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activities_requested')
-    category = models.CharField(max_length=255)
+    category = models.CharField(max_length=255, choices=CATEGORY_CHOICES)
     activity_name = models.CharField(max_length=255)
-    council_area = models.CharField(max_length=255)
+    council_area = models.CharField(max_length=255, choices=UserProfile.COUNCIL_AREA_CHOICES)
     date = models.DateField()
     time = models.TimeField()
-    gender_preference = models.CharField(max_length=20, blank=True)
     additional_details = models.TextField(max_length=1000, blank=True)
+    status = models.CharField(max_length=20, default='open')
 
     def __str__(self):
         return f"{self.activity_name} ({self.category})"
@@ -95,3 +102,18 @@ class Match(models.Model):
     volunteer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches')
     approval_status = models.CharField(max_length=20, default='pending')
     completion_status = models.CharField(max_length=20, default='incomplete')
+    cancelled_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='cancelled_matches')
+    hidden_by_requester = models.BooleanField(default=False)
+    hidden_by_volunteer = models.BooleanField(default=False)
+    cancellation_reason = models.TextField(max_length=500, blank=True, null=True)
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    message = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    # Optional: link to the activity so clicking the notification takes you there
+    activity = models.ForeignKey('Activity', on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
