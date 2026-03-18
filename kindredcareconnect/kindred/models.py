@@ -57,7 +57,6 @@ class UserProfile (models.Model):
     last_name = models.CharField(max_length=255, blank=True)
     gender = models.CharField(max_length=20, choices=GENDER_CHOICES, blank=True, null=True)
     council_area = models.CharField(max_length=255, choices=COUNCIL_AREA_CHOICES,blank=True)
-    # living_situation = models.CharField(max_length=20, blank=True)
     care_home_name = models.CharField(max_length=255, blank=True)
     address = models.CharField(max_length=500, blank=True)
     profile_picture = models.ImageField(upload_to="profile_pics", null=True, blank=True)
@@ -91,7 +90,6 @@ class Activity(models.Model):
     council_area = models.CharField(max_length=255, choices=UserProfile.COUNCIL_AREA_CHOICES)
     date = models.DateField()
     time = models.TimeField()
-    gender_preference = models.CharField(max_length=20, blank=True)
     additional_details = models.TextField(max_length=1000, blank=True)
     status = models.CharField(max_length=20, default='open')
 

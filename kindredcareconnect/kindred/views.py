@@ -679,7 +679,7 @@ def get_user_profile_json(request, user_id):
     data = {
         'full_name': f"{target_profile.first_name} {target_profile.last_name}",
         'usertype': target_profile.usertype,
-        'council_area': target_profile.council_area,
+        'council_area': target_profile.get_council_area_display(),
         'profile_picture_url': target_profile.profile_picture.url if target_profile.profile_picture else None,
         'joined': "Jan 2025", # Or use target_user.date_joined
         'bio': "I love helping out in my community!", # Add bio field to model later if desired
