@@ -241,8 +241,8 @@ body {
 
 /* Specific color for footer links to match design */
 .footer-link {
-    color: #6b7280; /* Gray text by default */
-    text-decoration: none;
+    color: #495057; /* Darker gray that meets WCAG AA standards */
+    text-decoration: underline; /* Helps users identify it as a link */
     opacity: 0.7; /* Start slightly faded */
     transition: all 0.3s ease;
     display: inline-block;
@@ -250,7 +250,7 @@ body {
 
 /* Footer Link Hover State */
 .footer-link:hover {
-    color: #059669; /* Turns Emerald on hover */
+    color: #000; /* Turns Emerald on hover */
     opacity: 1;    /* Increases to full visibility */
 }
 
