@@ -329,11 +329,15 @@ document.addEventListener('DOMContentLoaded', function() {
     if (actModal) {
         actModal.addEventListener('show.bs.modal', function (event) {
             const button = event.relatedTarget;
+            const description = button.getAttribute('data-desc');
             document.getElementById('modalActName').innerText = button.getAttribute('data-name') || 'Activity';
             document.getElementById('modalActCategory').innerText = button.getAttribute('data-category') || 'General';
             document.getElementById('modalActLocation').innerText = button.getAttribute('data-area') || 'TBD';
             document.getElementById('modalActDate').innerText = button.getAttribute('data-date') || 'Flexible';
             document.getElementById('modalActDesc').innerText = button.getAttribute('data-desc') || 'No description provided by the organizer.';
+            document.getElementById('modalActDesc').innerText = (description && description !== "None" && description !== "") 
+                ? description 
+                : 'No additional details provided by the User.';
         });
     }
 });

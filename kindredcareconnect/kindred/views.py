@@ -55,7 +55,8 @@ def activity_list_json(request):
             'requester_id': act.requester.id,
             'requester_username': act.requester.username,
             'additional_details': act.additional_details, 
-            'applied_volunteer_ids': active_applied_users 
+            'applied_volunteer_ids': active_applied_users,
+            'additional_details': act.additional_details
         })
         
     return JsonResponse(activity_list, safe=False)
@@ -349,6 +350,7 @@ def post_activity(request):
         date = request.POST.get('date')
         time = request.POST.get('time')
         council_area = request.POST.get('council_area')
+        additional_details = request.POST.get('additional_details')
 
         # Create the activity in the database
         Activity.objects.create(
@@ -357,7 +359,8 @@ def post_activity(request):
             category=category,
             date=date,
             time=time,
-            council_area=council_area
+            council_area=council_area,
+            additional_details=additional_details
         )
         
         # Send them back to the activities page to see their new post
@@ -628,6 +631,7 @@ def edit_activity(request, activity_id):
         activity.council_area = request.POST.get('council_area')
         activity.date = request.POST.get('date')
         activity.time = request.POST.get('time')
+        activity.additional_details = request.POST.get('additional_details')
         activity.save()
         
         # Security logic: Reset all matches to pending because time/location changed

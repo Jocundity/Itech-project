@@ -284,11 +284,13 @@ document.addEventListener('click', (e) => {
                 document.getElementById('editTime').value = act.time;
                 document.getElementById('editCategory').value = act.category.toLowerCase();
                 document.getElementById('editCouncilArea').value = act.council_area;
+                document.getElementById('editDesc').value = act.additional_details || '';
             } else {
                 // 2. Fallback: Populate using data attributes (Profile Page)
                 document.getElementById('editName').value = e.target.dataset.name || '';
                 document.getElementById('editDate').value = e.target.dataset.date || '';
                 document.getElementById('editTime').value = e.target.dataset.time || '';
+                document.getElementById('editDesc').value = e.target.dataset.desc || '';
                 
                 const categorySelect = document.getElementById('editCategory');
                 if (categorySelect) categorySelect.value = (e.target.dataset.category || '').toLowerCase();
@@ -443,7 +445,7 @@ function renderWithData(dataToRender) {
                                         data-category="${act.category}"
                                         data-area="${act.council_area}"
                                         data-date="${act.date} at ${act.time}"
-                                        data-desc="${act.description || 'No additional details provided.'}">
+                                        data-desc="${act.additional_details || 'No additional details provided.'}">
                                     View Details
                                 </button>
                             `}
@@ -509,7 +511,7 @@ function renderWithData(dataToRender) {
                                data-category="${act.category}"
                                data-area="${act.council_area}"
                                data-date="${act.date} at ${act.time}"
-                               data-desc="${act.description || 'No additional details provided.'}">
+                               data-desc="${act.additional_details || 'No additional details provided.'}">
                             View Details
                        </button>
                     `}

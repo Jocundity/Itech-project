@@ -164,55 +164,58 @@ Profile - KindredConnect
         <div class="container px-md-5">
             <div id="activity-history-list">
                 {% if profile.usertype == 'senior' or profile.usertype == 'care_home' %}
-                <div id="open-requests" class="mb-5">
-                    <h4 class="fw-bold h4 mb-4 text-emerald text-center text-lg-start"><i class="bi bi-megaphone me-2"></i>My Open Requests</h4>
-                    {% for activity in my_open_requests %}
-                        <div class="card border-0 shadow-sm rounded-4 mb-3 p-4 bg-white border-start border-emerald border-4 interactive-card">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h4 class="fw-bold mb-2">{{ activity.activity_name }}</h4>
-                                    <p class="text-muted fs-5 mb-0">{{ activity.category|title }} • {{ activity.date }}</p>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-outline-secondary py-2 px-4 rounded-pill fw-bold edit-btn" 
-                                        data-id="{{ activity.id }}" 
-                                        data-name="{{ activity.activity_name }}"
-                                        data-category="{{ activity.category }}"
-                                        data-date="{{ activity.date|date:'Y-m-d' }}"
-                                        data-time="{{ activity.time|time:'H:i' }}"
-                                        data-area="{{ activity.council_area }}"
-                                        data-bs-toggle="modal" 
-                                        data-bs-target="#editActivityModal" aria-label="Edit">
-                                        Edit
-                                    </button>
-                                    
-                                    <button type="button" 
-                                            class="btn btn-outline-danger py-2 px-4 rounded-pill fw-bold" 
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#redactModal"
-                                            data-id="{{ activity.id }}" aria-label="Redact">
-                                        Redact
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    {% empty %}
-                        <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white mb-4 interactive-card">
-                             <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
-                            <span class="fs-1">📣</span>
-                            </div>
-                            <h5 class="fw-bold text-muted">No active requests</h5>
-                            <p class="text-muted small mb-4">Post a request for your residents to find a volunteer!</p>
-                            <div class="d-flex justify-content-center">
-                                <button type="button" class="btn btn-emerald rounded-pill px-5 fw-bold shadow-sm d-inline-block"
+                    <div id="open-requests" class="mb-5">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+                            <h4 class="fw-bold h4 mb-0 text-emerald text-center text-lg-start">
+                                <i class="bi bi-megaphone me-2"></i>My Open Requests
+                            </h4>
+                            <button type="button" class="btn btn-emerald rounded-pill px-4 fw-bold shadow-sm"
                                     data-bs-toggle="modal" 
                                     data-bs-target="#postActivityModal" aria-label="Post a Request">
-                                    Post a Request
-                                </button>
-                            </div>
+                                + Post New Request
+                            </button>
                         </div>
-                    {% endfor %}
-                </div>
+
+                        {% for activity in my_open_requests %}
+                            <div class="card border-0 shadow-sm rounded-4 mb-3 p-4 bg-white border-start border-emerald border-4 interactive-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h4 class="fw-bold mb-2">{{ activity.activity_name }}</h4>
+                                        <p class="text-muted fs-5 mb-0">{{ activity.category|title }} • {{ activity.date }}</p>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-outline-secondary py-2 px-4 rounded-pill fw-bold edit-btn" 
+                                            data-id="{{ activity.id }}" 
+                                            data-name="{{ activity.activity_name }}"
+                                            data-category="{{ activity.category }}"
+                                            data-date="{{ activity.date|date:'Y-m-d' }}"
+                                            data-time="{{ activity.time|time:'H:i' }}"
+                                            data-area="{{ activity.council_area }}"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#editActivityModal" aria-label="Edit">
+                                            Edit
+                                        </button>
+                                        
+                                        <button type="button" 
+                                                class="btn btn-outline-danger py-2 px-4 rounded-pill fw-bold" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#redactModal"
+                                                data-id="{{ activity.id }}" aria-label="Redact">
+                                            Redact
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white mb-4 interactive-card">
+                                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                                    <span class="fs-1">📣</span>
+                                </div>
+                                <h5 class="fw-bold text-muted">No active requests</h5>
+                                <p class="text-muted small mb-0">You haven't posted any requests yet. Use the button above to get started!</p>
+                            </div>
+                        {% endfor %}
+                    </div>
                 {% endif %}
 
  <!-------------------------------------------- Pending Requests ----------------------------------------------->
@@ -255,7 +258,7 @@ Profile - KindredConnect
                                 data-category="{{ match.activity.category|title }}"
                                 data-area="{{ match.activity.get_council_area_display }}"
                                 data-date="{{ match.activity.date }} at {{ match.activity.time }}"
-                                data-desc="{{ match.activity.description }}" aria-label="View Details">
+                                data-desc="{{ match.activity.additional_details }}" aria-label="View Details">
                             View Details
                         </button>
                         <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-4 py-2 withdraw-app-btn" 
@@ -509,7 +512,7 @@ Profile - KindredConnect
                             <option value="outdoor">Outdoor</option>
                             <option value="home">Home & Hobbies</option>
                             <option value="companionship">Companionship</option>
-                            <option value="errand">Errand & Outdoor</option>
+                            <option value="errand">Errand</option>
                         </select>
                     </div>
                     <div class="row mb-3">
@@ -559,6 +562,10 @@ Profile - KindredConnect
                                         <option value="west_lothian">West Lothian</option>
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="additional_details" class="form-label small fw-bold">Additional Details (Optional)</label>
+                        <textarea name="additional_details" id="editDesc" class="form-control rounded-3 bg-light" rows="3"></textarea>
+                    </div>
                     <button type="submit" class="btn btn-emerald w-100 py-2 rounded-pill fw-bold">Update Activity</button>
                 </form>
             </div>
@@ -587,7 +594,7 @@ Profile - KindredConnect
                             <option value="outdoor">Outdoor</option>
                             <option value="home">Home & Hobbies</option>
                             <option value="companionship" selected>Companionship</option>
-                            <option value="errand">Errand & Outdoor</option>
+                            <option value="errand">Errand</option>
                         </select>
                     </div>
                     <div class="row mb-3">
@@ -630,6 +637,11 @@ Profile - KindredConnect
                                         <option value="west_dunbartonshire">West Dunbartonshire</option>
                                         <option value="west_lothian">West Lothian</option>
                         </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="additional_details" class="form-label small fw-bold">Additional Details (Optional)</label>
+                        <textarea name="additional_details" class="form-control rounded-3 bg-light" rows="3" 
+                                placeholder="e.g. Please bring a deck of cards or your favorite book..."></textarea>
                     </div>
                     <button type="submit" class="btn btn-emerald w-100 py-2 rounded-pill fw-bold" aria-label="Post Request">Post Request</button>
                 </form>
