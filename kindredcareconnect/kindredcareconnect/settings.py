@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-8akx4b&115x01a!wv9oma2*#snebxb*p2dd3b)21ej5-io+n(p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['kindred-connect-test.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'kindredcareconnect.urls'
@@ -128,3 +129,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # This tells the @login_required decorator where to redirect (when not signed in)
 LOGIN_URL = 'kindred:signin'
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
