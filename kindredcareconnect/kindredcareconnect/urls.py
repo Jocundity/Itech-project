@@ -24,6 +24,7 @@ urlpatterns = [
     path("kindred/", include("kindred.urls", namespace="kindred")),
     path('', RedirectView.as_view(url="kindred/", permanent=True)), # Redirect root url to kindred
     path('admin/', admin.site.urls),
+    path('accounts/login/', RedirectView.as_view(url='/kindred/signin/', query_string=True)),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
