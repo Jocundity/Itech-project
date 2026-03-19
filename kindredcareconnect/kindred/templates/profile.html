@@ -38,6 +38,18 @@ Profile - KindredConnect
                             class="badge bg-emerald-light text-emerald rounded-pill px-3 py-2 border border-emerald-subtle">
                             {{ profile.get_usertype_display }}
                         </span>
+
+                        {% if profile.usertype == 'volunteer' %}
+                            {% if is_busy %}
+                                <span class="badge bg-warning-subtle text-warning rounded-pill px-3 py-2 border border-warning-subtle">
+                                    ● Currently Helping Someone
+                                </span>
+                            {% else %}
+                                <span class="badge bg-info-subtle text-info rounded-pill px-3 py-2 border border-info-subtle">
+                                    ● Available to Help
+                                </span>
+                            {% endif %}
+                        {% endif %}
                     </div>
 
                     <div class="row g-3 mt-1 justify-content-center justify-content-lg-start">
@@ -57,7 +69,7 @@ Profile - KindredConnect
                 </div>
 
                 <div class="col-12 col-lg-3 text-center text-lg-end mt-4 mt-lg-0">
-                    <a href="{% url 'kindred:edit_profile' %}" class="btn btn-emerald px-4 rounded-pill fw-bold shadow-sm">Edit Profile</a>
+                    <a href="{% url 'kindred:edit_profile' %}" class="btn btn-emerald px-4 rounded-pill fw-bold shadow-sm" aria-label="Edit Profile">Edit Profile</a>
                 </div>
             </div>
         </div>
@@ -85,7 +97,7 @@ Profile - KindredConnect
                             <h5 class="fw-bold text-emerald mb-0">{{ emergency_contact.mobile }}</h5>
                         </div>
                         <div class="text-center text-lg-start mt-3">
-                            <a href="{% url 'kindred:delete_emergency_contact' emergency_contact.id %}"
+                            <a href="{% url 'kindred:delete_emergency_contact' emergency_contact.id %}" aria-label="Delete Contact"
                                 class="delete-contact btn btn-danger rounded-pill fw-bold shadow-sm">Delete Contact</a>
                         </div>
                     </div>
@@ -100,7 +112,7 @@ Profile - KindredConnect
 
             <!-- Always visible 'Add Emergency Contact' button -->
             <div class="text-center py-3">
-                <button id="add-contact" class="btn btn-emerald rounded-pill px-4 fw-bold my-3">Add Emergency
+                <button id="add-contact" class="btn btn-emerald rounded-pill px-4 fw-bold my-3" aria-label="Add Emergency Contact">Add Emergency
                     Contact</button>
             </div>
 
@@ -140,73 +152,545 @@ Profile - KindredConnect
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-emerald rounded-pill px-4 fw-bold">Save Contact</button>
+                    <button type="submit" class="btn btn-emerald rounded-pill px-4 fw-bold" aria-label="Save Contact">Save Contact</button>
                 </form>
             </div>
 
         </div>
     </section>
     {% endif %}
-
-    <section class="py-5">
+<!------------------------------------------ Open Requests ---------------------------------------------->
+       <section class="py-5">
         <div class="container px-md-5">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold h4 mb-0">My Activity History</h3>
-                <span class="badge bg-white text-muted border rounded-pill px-3">{{ my_matches|length }}
-                    Activities</span>
-            </div>
-
             <div id="activity-history-list">
-                {% if not my_matches %}
-                <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white">
-                    <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3"
-                        style="width: 80px; height: 80px;">
-                        <span class="fs-1">🗓️</span>
-                    </div>
-                    <h5 class="fw-bold text-muted">No activities yet</h5>
-                    <p class="text-muted small mb-4">You haven't joined any activities. Explore the community today!</p>
-                    <div>
-                        <a href="/kindred/activities/" class="btn btn-emerald rounded-pill px-4 fw-bold">Browse
-                            Activities</a>
-                    </div>
-                </div>
-                {% else %}
-                {% for match in my_matches %}
-                <div class="card border-0 shadow-sm rounded-4 safety-card mb-3">
-                    <div class="card-body p-4">
-                        <div class="row g-4 align-items-center">
-                            <div class="col-12 col-lg-4">
-                                <h5 class="fw-bold mb-1">{{ match.activity.activity_name }}</h5>
-                                <p class="text-muted smaller mb-0">{{ match.activity.category }}</p>
-                            </div>
-                            <div class="col-12 col-lg-6">
-                                <div class="row text-center text-lg-start">
-                                    <div class="col-4 border-end">
-                                        <span class="text-muted smaller d-block">Status</span>
-                                        <span class="small fw-bold text-emerald">{{ match.approval_status|title
-                                            }}</span>
+                {% if profile.usertype == 'senior' or profile.usertype == 'care_home' %}
+                    <div id="open-requests" class="mb-5">
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+                            <h4 class="fw-bold h4 mb-0 text-emerald text-center text-lg-start">
+                                <i class="bi bi-megaphone me-2"></i>My Open Requests
+                            </h4>
+                            <button type="button" class="btn btn-emerald rounded-pill px-4 fw-bold shadow-sm"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#postActivityModal" aria-label="Post a Request">
+                                + Post New Request
+                            </button>
+                        </div>
+
+                        {% for activity in my_open_requests %}
+                            <div class="card border-0 shadow-sm rounded-4 mb-3 p-4 bg-white border-start border-emerald border-4 interactive-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h4 class="fw-bold mb-2">{{ activity.activity_name }}</h4>
+                                        <p class="text-muted fs-5 mb-0">{{ activity.category|title }} • {{ activity.date }}</p>
                                     </div>
-                                    <div class="col-4 border-end">
-                                        <span class="text-muted smaller d-block">Date</span>
-                                        <span class="small fw-medium">{{ match.activity.date }}</span>
-                                    </div>
-                                    <div class="col-4">
-                                        <span class="text-muted smaller d-block">Time</span>
-                                                                                        <span class="small fw-medium">{{ match.activity.time }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-lg-2 d-flex justify-content-center justify-content-lg-end">
-                                        <button class="btn btn-light btn-sm px-3 border shadow-sm rounded-pill small">Details</button>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-outline-secondary py-2 px-4 rounded-pill fw-bold edit-btn" 
+                                            data-id="{{ activity.id }}" 
+                                            data-name="{{ activity.activity_name }}"
+                                            data-category="{{ activity.category }}"
+                                            data-date="{{ activity.date|date:'Y-m-d' }}"
+                                            data-time="{{ activity.time|time:'H:i' }}"
+                                            data-area="{{ activity.council_area }}"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#editActivityModal" aria-label="Edit">
+                                            Edit
+                                        </button>
+                                        
+                                        <button type="button" 
+                                                class="btn btn-outline-danger py-2 px-4 rounded-pill fw-bold" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#redactModal"
+                                                data-id="{{ activity.id }}" aria-label="Redact">
+                                            Redact
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% empty %}
+                            <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white mb-4 interactive-card">
+                                <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                                    <span class="fs-1">📣</span>
+                                </div>
+                                <h5 class="fw-bold text-muted">No active requests</h5>
+                                <p class="text-muted small mb-0">You haven't posted any requests yet. Use the button above to get started!</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+ <!-------------------------------------------- Pending Requests ----------------------------------------------->
+<div id="pending-activities" class="mb-5">
+    <h4 class="fw-bold h5 mb-3 text-warning text-center text-lg-start"><i class="bi bi-clock-history me-2"></i>Pending Activities</h4>
+    {% for match in pending %}
+        <div class="card border-0 shadow-sm rounded-4 mb-3 p-4 border-start border-warning border-4 interactive-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="fw-bold mb-1">{{ match.activity.activity_name }}</h5>
+                    <p class="text-muted fs-5 smaller mb-0">
+                        {% if match.activity.requester == request.user %}
+                            Volunteer <a href="#" class="view-user-link text-emerald fw-bold text-decoration-none" 
+                            data-user-id="{{ match.volunteer.id }}">{{ match.volunteer.username }}</a> wants to help.
+                        {% else %}
+                            Waiting for <a href="#" class="view-user-link text-emerald fw-bold text-decoration-none" 
+                            data-user-id="{{ match.activity.requester.id }}">{{ match.activity.requester.username }}</a> to confirm.
+                        {% endif %}
+                    </p>
+                </div>
+                
+                {% if match.activity.requester == request.user %}
+                    <div class="d-flex gap-3 align-items-center">
+                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-4 py-2" data-bs-toggle="modal" data-bs-target="#cancelModal" data-match-id="{{ match.id }}" aria-label="Decline">Decline</button>
+                        <button type="button" 
+                            class="btn btn-sm btn-emerald rounded-pill px-4 py-2 shadow-sm approve-trigger-btn" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#confirmApproveModal" 
+                            data-match-id="{{ match.id }}" 
+                            data-volunteer-name="{{ match.volunteer.username }}" aria-label="Approve">
+                            Approve
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="d-flex gap-2 align-items-center">
+                        <button type="button" class="btn btn-outline-emerald btn-sm rounded-pill px-4 py-2 view-details-btn" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#activityDetailsModal"
+                                data-name="{{ match.activity.activity_name }}"
+                                data-category="{{ match.activity.category|title }}"
+                                data-area="{{ match.activity.get_council_area_display }}"
+                                data-date="{{ match.activity.date }} at {{ match.activity.time }}"
+                                data-desc="{{ match.activity.additional_details }}" aria-label="View Details">
+                            View Details
+                        </button>
+                        <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-4 py-2 withdraw-app-btn" 
+                                data-match-id="{{ match.id }}"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#withdrawModal" aria-label="Withdraw Application">
+                            Withdraw Application
+                        </button>
+                    </div>
                 {% endif %}
             </div>
         </div>
+    {% empty %}
+        <div class="card border-0 shadow-sm rounded-4 p-4 text-center bg-white mb-4 interactive-card">
+            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-2" style="width: 60px; height: 60px;">
+                <span class="fs-2">⏳</span>
+            </div>
+            <h6 class="fw-bold text-muted mb-1">No pending requests</h6>
+            <p class="text-muted smaller mb-0">New volunteer offers will appear here.</p>
+        </div>
+    {% endfor %}
+</div>
+
+<!--------------------------------- Confirmed Activities ----------------------------------->
+            <div id="confirmed-activities" class="mb-5">
+                <h4 class="fw-bold h5 mb-3 text-emerald text-center text-lg-start"><i class="bi bi-calendar-check me-2"></i>Confirmed Activities</h4>
+                {% for match in confirmed %}
+                    <div class="card border-0 shadow-sm rounded-4 mb-3 p-4 border-start border-emerald border-4 interactive-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="fw-bold mb-1">{{ match.activity.activity_name }}</h5>
+                                <p class="text-muted fs-5 smaller mb-1">
+                                    {% if match.activity.requester == request.user %}
+                                        Matched with 
+                                        <a href="#" class="view-user-link text-emerald fw-bold text-decoration-none" 
+                                        data-user-id="{{ match.volunteer.id }}">{{ match.volunteer.username }}</a>
+                                    {% else %}
+                                        Helping 
+                                        <a href="#" class="view-user-link text-emerald fw-bold text-decoration-none" 
+                                        data-user-id="{{ match.activity.requester.id }}">{{ match.activity.requester.username }}</a>
+                                    {% endif %}
+                                </p>
+                                <small class="text-muted">{{ match.activity.date }} at {{ match.activity.time }}</small>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                            {% if match.activity.requester == request.user %}
+                                <button class="btn btn-outline-secondary btn-sm px-4 py-2 rounded-pill fw-bold edit-btn" 
+                                        data-id="{{ match.activity.id }}" 
+                                        data-name="{{ match.activity.activity_name }}"
+                                        data-category="{{ match.activity.category }}"
+                                        data-date="{{ match.activity.date|date:'Y-m-d' }}"
+                                        data-time="{{ match.activity.time|time:'H:i' }}"
+                                        data-area="{{ match.activity.council_area }}"
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#editActivityModal" aria-label="Edit">
+                                    Edit
+                                </button>
+                            {% endif %}    
+                                <button type="button" class="btn btn-outline-danger btn-sm px-4 py-2 rounded-pill fw-bold" 
+                                        data-bs-toggle="modal" data-bs-target="#cancelModal" data-match-id="{{ match.id }}" aria-label="Cancel">
+                                    Cancel
+                                </button>
+                                
+                                <button type="button" class="btn btn-emerald btn-sm rounded-pill px-4 py-2S fw-bold shadow-sm" 
+                                        data-bs-toggle="modal" data-bs-target="#completeModal" data-match-id="{{ match.id }}" aria-label="Complete"
+                                        >
+                                    Complete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white mb-4 interactive-card">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                            <span class="fs-1">🤝</span>
+                        </div>
+                        <h5 class="fw-bold text-muted">No confirmed plans yet</h5>
+                        <p class="text-muted small mb-4">Once an activity is approved, details will appear here.</p>
+                        <div class="d-flex justify-content-center">
+                            <a href="{% url 'kindred:activities' %}" class="btn btn-emerald rounded-pill px-5 fw-bold shadow-sm d-inline-block" aria-label="Browse Activities">Browse Activities</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+<!-- -------------------------------------------Activity History ----------------------------------------------->
+                <div id="activity-history" class="mt-5">
+                   <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+                        <h4 class="fw-bold h4 mb-0 text-muted text-center text-lg-start">Activity History</h4>
+                        {% if history %}
+                                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill px-3 py-1 fw-bold shadow-sm"
+                                        data-bs-toggle="modal" data-bs-target="#confirmHistoryClear" aria-label="Clear History">
+                                    <i class="bi bi-trash3 me-1"></i> Clear History
+                                </button>
+                        {% endif %}
+                    </div>
+
+                    {% for match in history %}
+                       <div class="card border-0 shadow-sm rounded-4 mb-3 p-4 bg-light opacity-75 interactive-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 class="fw-bold mb-2 {% if match.completion_status == 'cancelled' %}text-decoration-line-through text-muted{% endif %}">
+                                        {{ match.activity.activity_name }}
+                                    </h4>
+
+                                    <p class="mb-0 fs-5">
+                                        {% if match.completion_status == 'cancelled' %}
+                                            <span class="badge bg-danger-subtle text-danger rounded-pill">
+                                                {% if "Another volunteer was selected" in match.cancellation_reason %}
+                                                    Not Selected
+                                                {% elif match.cancelled_by == request.user %}
+                                                    Withdrawn by you
+                                                {% else %}
+                                                    Withdrawn by {{ match.cancelled_by.username }}
+                                                {% endif %}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-success-subtle text-success rounded-pill">Completed</span>
+                                        {% endif %}
+                                        
+                                        {% if match.cancellation_reason %}
+                                            <div class="mt-3 p-3 bg-white rounded-3 border-start border-3 shadow-sm 
+                                                {% if match.completion_status == 'cancelled' %}border-danger{% else %}border-success{% endif %}">
+                                                <p class="small text-muted mb-0 italic">
+                                                    <i class="bi bi-chat-right-quote me-2"></i>
+                                                    "{{ match.cancellation_reason }}"
+                                                </p>
+                                            </div>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <small class="text-muted fs-6">Date: {{ match.activity.date }}</small>
+                            </div>
+                        </div>
+                    {% empty %}
+                    <div class="card border-0 shadow-sm rounded-4 p-5 text-center bg-white border-dashed interactive-card">
+                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-archive text-muted fs-1"></i>
+                        </div>
+                        <p class="text-muted fs-5 mb-0">Your activity history is currently empty.</p>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
     </section>
+</div>
+
+<!---------------------------------------- MODAL SECTION ----------------------------------------->
+
+
+<!----------------------------------- Modal for cancellation reason ---------------------------------------->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Cancel Activity</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="cancelForm" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p class="text-muted">Please provide a reason for cancelling. This will be shared with the other person.</p>
+                    <textarea name="reason" class="form-control rounded-3" rows="3" placeholder="e.g., I'm feeling unwell..." required></textarea>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Go Back</button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold">Confirm Cancellation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------------------- Clear Notification Modal ---------------------------------------->
+ <div class="modal fade" id="confirmNotificationClear" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-body text-center p-4">
+                <div class="fs-1 mb-3">🔔</div>
+                <p class="fw-bold mb-0">Clear all recent notifications?</p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal" aria-label="Cancel">Cancel</button>
+                <button type="button" id="executeNotificationClear" class="btn btn-danger rounded-pill px-4 fw-bold" aria-label="Clear All">Clear All</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-------------------------------- Clear History Modal -------------------------------------->
+ <div class="modal fade" id="confirmHistoryClear" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-body text-center p-4">
+                <div class="fs-1 mb-3">🗑️</div>
+                <h5 class="fw-bold">Clear Activity History?</h5>
+                <p class="text-muted">This will hide your past activities from your profile. This cannot be undone.</p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal" aria-label="Keep History">Keep History</button>
+                <form method="POST" action="{% url 'kindred:clear_activity_history' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold" aria-label="Yes, Clear it">Yes, Clear it</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!------------------------------------ Mark as complete modal --------------------------------->
+<div class="modal fade" id="completeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <form id="completeForm" method="POST">
+                {% csrf_token %}
+                <div class="modal-body text-center py-4">
+                    <div class="fs-1 mb-3">🎉</div>
+                    <h5 class="fw-bold">Activity Complete!</h5>
+                    <p class="text-muted small">Want to leave a note about how it went?</p>
+                    <textarea name="feedback" class="form-control rounded-3 mb-3" rows="3" 
+                              placeholder="e.g., This was great! Lets do it again Sometime!"></textarea>
+                </div>
+                <div class="modal-footer border-0 justify-content-center pb-4">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal" aria-label="Not yet">Not yet</button>
+                    <button type="submit" class="btn btn-emerald rounded-pill px-5 fw-bold text-white" aria-label="Confirm & Save">Confirm & Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-------------------------------------------- Edit button modal form ----------------------------->
+ <div class="modal fade" id="editActivityModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-0 p-4 pb-0">
+                <h3 class="modal-title fw-bold">Edit Activity</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="editActivityForm" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="activity_name" class="form-label small fw-bold">Activity Name</label>
+                        <input type="text" name="activity_name" id="editName" class="form-control rounded-pill bg-light" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label small fw-bold">Category</label>
+                        <select name="category" id="editCategory" class="form-select rounded-pill bg-light">
+                            <option value="outdoor">Outdoor</option>
+                            <option value="home">Home & Hobbies</option>
+                            <option value="companionship">Companionship</option>
+                            <option value="errand">Errand</option>
+                        </select>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="date" class="form-label small fw-bold">Date</label>
+                            <input type="date" name="date" id="editDate" class="form-control rounded-pill bg-light" required>
+                        </div>
+                        <div class="col">
+                            <label for="time" class="form-label small fw-bold">Time</label>
+                            <input type="time" name="time" id="editTime" class="form-control rounded-pill bg-light" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="council_area" class="form-label small fw-bold">Council Area</label>
+                        <select name="council_area" id="editCouncilArea" class="form-select rounded-pill bg-light">
+                                        <option value="aberdeen_city">Aberdeen City</option>
+                                        <option value="aberdeenshire">Aberdeenshire</option>
+                                        <option value="angus">Angus</option>
+                                        <option value="argyll_and_bute">Argyll and Bute</option>
+                                        <option value="clackmannanshire">Clackmannanshire</option>
+                                        <option value="dumfries_and_galloway">Dumfries and Galloway</option>
+                                        <option value="dundee_city">Dundee City</option>
+                                        <option value="east_ayrshire">East Ayrshire</option>
+                                        <option value="east_dunbartonshire">East Dunbartonshire</option>
+                                        <option value="east_lothian">East Lothian</option>
+                                        <option value="east_renfrewshire">East Renfrewshire</option>
+                                        <option value="city_of_edinburgh">City of Edinburgh</option>
+                                        <option value="falkirk">Falkirk</option>
+                                        <option value="fife">Fife</option>
+                                        <option value="glasgow_city">Glasgow City</option>
+                                        <option value="highland">Higland</option>
+                                        <option value="inverclyde">Inverclyde</option>
+                                        <option value="midlothian">Midlothian</option>
+                                        <option value="moray">Moray</option>
+                                        <option value="na_h-eileanan_siar_(western_isles)">Na h-Eileanan Siar (Western Isles)</option>
+                                        <option value="north_ayrshire">North Ayrshire</option>
+                                        <option value="north_lanarkshire">North Lanarkshire</option>
+                                        <option value="orkney">Orkney</option>
+                                        <option value="perth_and_kinross">Perth and Kinross</option>
+                                        <option value="renfrewshire">Renfrewshire</option>
+                                        <option value="scottish_borders">Scottish Borders</option>
+                                        <option value="shetland_islands">Shetland Islands</option>
+                                        <option value="south_ayrshire">South Ayrshire</option>
+                                        <option value="south_lanarkshire">South Lanarkshire</option>
+                                        <option value="stirling">Stirling</option>
+                                        <option value="west_dunbartonshire">West Dunbartonshire</option>
+                                        <option value="west_lothian">West Lothian</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="additional_details" class="form-label small fw-bold">Additional Details (Optional)</label>
+                        <textarea name="additional_details" id="editDesc" class="form-control rounded-3 bg-light" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-emerald w-100 py-2 rounded-pill fw-bold">Update Activity</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!----------------------------------- Post activity modal --------------------------------->
+<div class="modal fade" id="postActivityModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-0 p-4 pb-0">
+                <h3 class="modal-title fw-bold">Request New Activity</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="postActivityForm" method="POST" action="{% url 'kindred:post_activity' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="activity_name" class="form-label small fw-bold">Activity Name</label>
+                        <input type="text" name="activity_name" class="form-control rounded-pill bg-light" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label small fw-bold">Category</label>
+                        <select name="category" class="form-select rounded-pill bg-light">
+                            <option value="outdoor">Outdoor</option>
+                            <option value="home">Home & Hobbies</option>
+                            <option value="companionship" selected>Companionship</option>
+                            <option value="errand">Errand</option>
+                        </select>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col"><label for="date" class="form-label small fw-bold">Date</label><input type="date" name="date" class="form-control rounded-pill bg-light" required></div>
+                        <div class="col"><label for="time" class="form-label small fw-bold">Time</label><input type="time" name="time" class="form-control rounded-pill bg-light" required></div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="council_area" class="form-label small fw-bold">Council Area</label>
+                        <select name="council_area" class="form-select rounded-pill bg-light">
+                                        <option value="aberdeen_city">Aberdeen City</option>
+                                        <option value="aberdeenshire">Aberdeenshire</option>
+                                        <option value="angus">Angus</option>
+                                        <option value="argyll_and_bute">Argyll and Bute</option>
+                                        <option value="clackmannanshire">Clackmannanshire</option>
+                                        <option value="dumfries_and_galloway">Dumfries and Galloway</option>
+                                        <option value="dundee_city">Dundee City</option>
+                                        <option value="east_ayrshire">East Ayrshire</option>
+                                        <option value="east_dunbartonshire">East Dunbartonshire</option>
+                                        <option value="east_lothian">East Lothian</option>
+                                        <option value="east_renfrewshire">East Renfrewshire</option>
+                                        <option value="city_of_edinburgh">City of Edinburgh</option>
+                                        <option value="falkirk">Falkirk</option>
+                                        <option value="fife">Fife</option>
+                                        <option value="glasgow_city">Glasgow City</option>
+                                        <option value="highland">Higland</option>
+                                        <option value="inverclyde">Inverclyde</option>
+                                        <option value="midlothian">Midlothian</option>
+                                        <option value="moray">Moray</option>
+                                        <option value="na_h-eileanan_siar_(western_isles)">Na h-Eileanan Siar (Western Isles)</option>
+                                        <option value="north_ayrshire">North Ayrshire</option>
+                                        <option value="north_lanarkshire">North Lanarkshire</option>
+                                        <option value="orkney">Orkney</option>
+                                        <option value="perth_and_kinross">Perth and Kinross</option>
+                                        <option value="renfrewshire">Renfrewshire</option>
+                                        <option value="scottish_borders">Scottish Borders</option>
+                                        <option value="shetland_islands">Shetland Islands</option>
+                                        <option value="south_ayrshire">South Ayrshire</option>
+                                        <option value="south_lanarkshire">South Lanarkshire</option>
+                                        <option value="stirling">Stirling</option>
+                                        <option value="west_dunbartonshire">West Dunbartonshire</option>
+                                        <option value="west_lothian">West Lothian</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="additional_details" class="form-label small fw-bold">Additional Details (Optional)</label>
+                        <textarea name="additional_details" class="form-control rounded-3 bg-light" rows="3" 
+                                placeholder="e.g. Please bring a deck of cards or your favorite book..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-emerald w-100 py-2 rounded-pill fw-bold" aria-label="Post Request">Post Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------------------- Confirm approval modal ------------------------------------->
+ <div class="modal fade" id="confirmApproveModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-body text-center p-4">
+                <div class="fs-1 mb-3">🤝</div>
+                <h5 class="fw-bold">Confirm Volunteer</h5>
+                <p class="text-muted">Do you want to approve <span id="approveVolunteerName" class="fw-bold text-dark"></span>? This will automatically decline all other pending offers for this activity.</p>
+                <form id="approveForm" method="POST">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-emerald rounded-pill py-2 fw-bold" aria-label="Confirm & Approve">Confirm & Approve</button>
+                        <button type="button" class="btn btn-light rounded-pill py-2" data-bs-dismiss="modal" aria-label="Cancel">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--------------------------------- Redact Activity modal ------------------------------------->
+<div class="modal fade" id="redactModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-body text-center p-4">
+                <div class="fs-1 mb-3">🗑️</div>
+                <h5 class="fw-bold">Redact this Request?</h5>
+                <p class="text-muted">This will remove the activity from the public feed. Any pending volunteers will be notified.</p>
+
+                <div class="text-start mb-3">
+                    <label class="form-label small fw-bold text-muted">Reason (Optional)</label>
+                    <textarea id="redactReason" class="form-control rounded-3" rows="2" 
+                              placeholder="e.g., Change of plans..."></textarea>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="button" id="confirmRedactBtn" class="btn btn-danger rounded-pill py-2 fw-bold" aria-label="Confirm & Redact">Confirm & Redact</button>
+                    <button type="button" class="btn btn-light rounded-pill py-2" data-bs-dismiss="modal" aria-label="Cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Javascript for Emergency Contact form showing -->

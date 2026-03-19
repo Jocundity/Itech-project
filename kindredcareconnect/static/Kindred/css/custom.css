@@ -35,7 +35,7 @@ body {
 }
 
 .nav-signin:hover {
-    background-color: #059669; /* Full Emerald green background */
+    background-color: #1b5e20; /* Full Emerald green background */
     color: #ffffff ; /* White text on hover */
     box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2); /* Subtle glow */
 }
@@ -76,12 +76,26 @@ body {
 
 /* Hero Background Styling */
 
+/* custom.css */
 .hero-section {
-    height: 80vh; /* Takes up 80% of the screen height */
+    /* Change fixed height to min-height to allow expansion */
+    min-height: 80vh; 
+    height: auto; 
+    /* Add padding to the bottom so badges never hit the edge */
+    padding-bottom: 3rem; 
+    padding-top: 2rem;
     background: linear-gradient(to right, rgba(252, 250, 248, 0.9) 30%, rgba(252, 250, 248, 0.2)),
                 url("../../images/hero-bg.jpg");
     background-size: cover;
     background-position: center;
+    background-attachment: scroll;
+}
+
+/* Optional: Extra breathing room for the very smallest screens */
+@media (max-width: 576px) {
+    .hero-section {
+        padding-bottom: 4rem;
+    }
 }
 /* ------------------------------------------------------------------------------------------------- */
 .text-emerald { color: #065f46; }
@@ -102,6 +116,14 @@ body {
     color: #065f46;
     border: 2px solid #059669;
     border-radius: 12px;
+}
+
+.btn-emerald-outline:hover,
+.btn-emerald-outline:focus {
+    background-color: #ffffff;
+    color: #065f46;
+    border-color: #059669;
+    text-decoration: none;
 }
 
 .badge-pill .badge {
@@ -227,8 +249,8 @@ body {
 
 /* Specific color for footer links to match design */
 .footer-link {
-    color: #6b7280; /* Gray text by default */
-    text-decoration: none;
+    color: #495057; /* Darker gray that meets WCAG AA standards */
+    text-decoration: underline; /* Helps users identify it as a link */
     opacity: 0.7; /* Start slightly faded */
     transition: all 0.3s ease;
     display: inline-block;
@@ -236,7 +258,7 @@ body {
 
 /* Footer Link Hover State */
 .footer-link:hover {
-    color: #059669; /* Turns Emerald on hover */
+    color: #000; /* Turns Emerald on hover */
     opacity: 1;    /* Increases to full visibility */
 }
 
@@ -249,7 +271,155 @@ body {
 
 /* Custom Style for activities page */
 
+:root {
+    --emerald-primary: #059669;
+    --emerald-hover: #047857;
+}
 
+/* Base Interactivity for ALL cards */
+.interactive-card {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+}
+
+/* 1. Volunteer/Senior Grid Card Hover (Lifts Up) */
+.col-lg-6 .interactive-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(5, 150, 105, 0.15) !important;
+    border-color: #059669 !important;
+}
+
+/* 2. Care Home List Row Hover (Shifts Right) */
+.col-12 .interactive-card:hover {
+    transform: translateX(8px);
+    background-color: #f0fdf4 !important; /* Subtle emerald tint on hover */
+    box-shadow: -4px 4px 12px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Button Hover State for View Details */
+.view-details-btn {
+    transition: all 0.2s ease;
+}
+
+.view-details-btn:hover {
+    background-color: #059669 !important;
+    color: white !important;
+    letter-spacing: 0.5px;
+}
+
+/* View Details Button Styling */
+.view-details-btn {
+    border-color: var(--emerald-primary);
+    color: var(--emerald-primary);
+    font-weight: 600;
+    transition: all 0.25s ease-in-out;
+}
+
+.view-details-btn:hover {
+    background-color: var(--emerald-primary) !important;
+    color: white !important;
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 4px 8px rgba(5, 150, 105, 0.2) !important;
+}
+
+.view-details-btn:active {
+    transform: translateY(0); /* Pressed effect */
+}
+
+/* Styling for the Senior Request Banner */
+.request-banner {
+    transition: all 0.3s ease-in-out;
+    border: 2px solid transparent;
+}
+
+.request-banner:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(5, 150, 105, 0.15) !important;
+    border-color: #10b981; /* Adds a visible emerald border on hover */
+}
+
+/* Enhancing the Request Button */
+.btn-request-main {
+    background-color: #ffffff;
+    color: #059669;
+    border: 2px solid #059669;
+    transition: all 0.3s ease;
+}
+
+.btn-request-main:hover {
+    background-color: #059669;
+    color: #ffffff;
+    transform: scale(1.05); /* Slightly grows the button */
+    box-shadow: 0 8px 15px rgba(5, 150, 105, 0.2);
+}
+
+/* Standardize card layout to prevent weird spacing */
+#available-activities-list .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ensures all cards in a row are the same height */
+}
+
+#available-activities-list .card-body, 
+#available-activities-list .interactive-card {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Forces buttons to the very bottom of the card */
+#available-activities-list .d-grid, 
+#available-activities-list .d-flex.gap-2 {
+    margin-top: auto; 
+    padding-top: 1rem;
+}
+
+.mobile-search-center {
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .mobile-search-center {
+        text-align: left;
+    }
+
+    #category-dropdown {
+        width: 180px !important; /* Prevents dropdown from taking up 50% of the bar */
+        max-width: 200px;
+        border-top: none !important;
+        font-size: 1rem !important; /* Consistent size for desktop */
+    }
+
+    #activity-search {
+        font-size: 1rem !important;
+    }
+
+    .notification-mobile-fix {
+        width: 300px; /* Standard width for desktop */
+        position: absolute !important;
+    }
+}
+
+/* Senior Request new activity form---------------------------------------------------------------------- */
+/* Make the modal wider for more breathing room */
+.modal-lg-custom {
+    max-width: 600px;
+}
+
+/* Make form controls larger and easier to click */
+.form-senior-lg .form-control, 
+.form-senior-lg .form-select {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    border-radius: 12px !important; /* Matches your safety cards */
+}
+
+.form-senior-lg label {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: #374151;
+}
+/* --------------------------------------------------------------------------------------- */
 .category-filter {
     background-color: #ffffff;
     border: 1px solid #e5e7eb ; /* Default subtle border */
@@ -314,18 +484,66 @@ body {
     color: #ffffff ;
 }
 
-/* 4. Scrollbar: Hidden but functional for categories */
+/* 4. Scrollbar */
+.custom-scrollbar {
+    display: flex;
+    overflow-x: auto; /* Enables horizontal scrolling */
+    white-space: nowrap; /* Prevents categories from wrapping to new lines */
+    -webkit-overflow-scrolling: touch; /* Ensures smooth momentum scrolling on iOS */
+    gap: 1rem;
+    padding-bottom: 15px; /* Adds space so shadows aren't cut off */
+    scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
+
+/* Keeps scrollbar hidden in Chrome, Safari, and Edge */
 .custom-scrollbar::-webkit-scrollbar {
+    display: none;
     height: 0px; 
 }
 
+/* 2. Mobile Specific Overrides (Max-width 767px) */
 @media (max-width: 767px) {
+    /* Fix for the 'boxy' look when stacked */
+    .input-group.rounded-pill {
+        border-radius: 2rem !important;
+        padding: 8px 0;
+    }
+
+    .mobile-search-center {
+        text-align: center; /* Centers the placeholder text */
+    }
+
+    /* Centers the dropdown text specifically for mobile */
+    #category-dropdown {
+        text-align-last: center;
+        border-top: 1px solid #f3f4f6 !important;
+        font-size: 1rem !important; /* Smaller text to match search input */
+        width: 100% !important;
+    }
+
+    #activity-search {
+        font-size: 1rem !important;
+        text-align: center;
+    }
+
+    /* Utility to hide the divider line */
     .border-md-start {
         border-left: none !important;
     }
-    /* Centers everything on mobile for a cleaner look */
+
+    /* Centers everything on mobile safety cards */
     .safety-card {
         text-align: center;
+    }
+
+    .notification-mobile-fix {
+        position: fixed !important; /* Locks it to the viewport, not the icon */
+        top: 80px !important; /* Adjust based on your navbar height */
+        left: 5% !important;
+        right: 5% !important;
+        width: 90% !important; /* Takes up 90% of screen width */
+        transform: none !important; /* Stops Bootstrap's auto-positioning */
+        margin: 0 auto;
     }
 }
 
@@ -370,7 +588,26 @@ body {
     .safety-card:hover { transform: translateY(-3px); }
     .smaller { font-size: 0.8rem; }
     .border-lg-end { border-right: 1px solid #dee2e6; }
-    @media (max-width: 991px) { .border-lg-end { border-right: none; border-bottom: 1px solid #dee2e6; padding-bottom: 15px; } }
+    @media (max-width: 991px) { 
+        .border-lg-end { border-right: none; border-bottom: 1px solid #dee2e6; padding-bottom: 15px; }
+        .navbar-nav .nav-link {
+        /* 1. Forces the link to only be as wide as its text */
+        display: inline-block; 
+        width: fit-content;
+        margin: 0 auto; /* Keeps it centered while being narrow */
+        }
+
+        .nav-link::after {
+            /* 2. Resets the underline to start from the left of the text */
+            left: 0 !important;
+            transform: none !important;
+        }
+
+        .nav-link:hover::after {
+            /* 3. Now 100% means 100% of the word, not the screen */
+            width: 100% !important;
+        }
+    }
 
     #emergency-contact-form { display: none; }
     #profile-message {
@@ -389,10 +626,54 @@ body {
         object-fit: cover;
     }
     
+ /* Interactive cards for the Profile timeline */
+    .interactive-card {
+        transition: all 0.3s ease;
+        cursor: default;
+    }
 
+    .interactive-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+        border-color: #059669 !important; /* Highlights the border in emerald on hover */
+    }
+
+    /* Redact button hover effect */
+    .btn-outline-danger:hover {
+        background-color: #dc2626;
+        color: white;
+    }
+
+    /* Styling for interactive decline button */
+.btn-link.text-danger {
+    transition: all 0.2s ease;
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+}
+
+.btn-link.text-danger:hover {
+    background-color: #fee2e2; /* Light red background on hover */
+    color: #dc2626 !important; /* Darker red text */
+    text-decoration: none;
+    transform: scale(1.05);
+}
+
+/* custom.css */
+.clear-history-btn {
+    transition: all 0.3s ease;
+    border-color: #dee2e6;
+    color: #6c757d;
+}
+
+.clear-history-btn:hover {
+    background-color: #dc3545 !important; /* Changes to red on hover */
+    border-color: #dc3545 !important;
+    color: white !important;
+    transform: scale(1.05); /* Slight "pop" effect */
+}
     
 
-    /* ---------------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------- */
 
  /* Styling for the new Navbar Profile Dropdown */
 #profileDropdown {
@@ -413,3 +694,62 @@ body {
     text-decoration: underline !important;
     color: #047857; /* Slightly darker emerald on hover */
 }
+
+/* ---------------------------------------------------------------------------------- */
+
+/* Style for  Checking profile*/
+.view-user-link {
+    transition: all 0.2s ease-in-out; /* Smooth transition for color and underline */
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.view-user-link:hover {
+    color: #047857 !important; /* A slightly darker emerald on hover */
+    background-color: #ecfdf5; /* Very light emerald background tint */
+    text-decoration: underline !important; /* Traditional link behavior */
+}
+
+
+/* Style for notification scrolling */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Offset the scroll so the header doesn't cover the section title */
+#pending-activities, 
+#confirmed-activities, 
+#open-requests, 
+#activity-history {
+    scroll-margin-top: 120px; 
+}
+
+/* ---------------------------------------------------------------------------------- */
+
+/* Styles for accessibility */
+html {
+    font-size: 18px !important; /* use as root size 16px = 1rem */
+}
+
+body, p, span, .small, .smaller {
+    font-size: 1rem !important;
+}
+
+h1, .within-h1 {
+    font-size: 2.5rem !important;
+}
+
+h2 {
+    font-size: 2.25rem !important;
+}
+
+h3 {
+    font-size: 2rem !important;
+}
+
+h4 {
+    font-size: 1.75rem !important;
+}
+
+
