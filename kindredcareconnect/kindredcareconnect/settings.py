@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-8akx4b&115x01a!wv9oma2*#snebxb*p2dd3b)21ej5-io+n(p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['kindred-connect-test.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['kindredcareconnect.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
