@@ -358,7 +358,7 @@ def post_activity(request):
         date = request.POST.get('date')
         time = request.POST.get('time')
         council_area = request.POST.get('council_area')
-        additional_details = request.POST.get('additional_details')
+        additional_details = request.POST.get('additional_details','')
 
         # Create the activity in the database
         Activity.objects.create(
