@@ -1,4 +1,5 @@
 # KindredConnect
+[![Watch the video demonstration](https://img.youtube.com/vi/Nr53-xHHDks/0.jpg)](https://youtu.be/Nr53-xHHDks)
 
 [Deployed Web Application Link](https://kindredcareconnect.onrender.com)
 
