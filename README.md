@@ -1,6 +1,6 @@
 # KindredConnect
 
-[Deployed Web Application Link] (https://kindredcareconnect.onrender.com)
+[Deployed Web Application Link](https://kindredcareconnect.onrender.com)
 
 KindredConnect is a centralised community platform designed to bridge the gap between elderly residents,
 local care homes, and volunteers.
