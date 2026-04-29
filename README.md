@@ -19,4 +19,4 @@ increases senior engagement, and empowers volunteers to contribute effectively t
 - Django
 - Python
 - SQl (SQLite)
-- HTML, CSS (including Bootstrap), Javascript, JQuery, AJAX
+- HTML, CSS (including Bootstrap), Javascript, AJAX
